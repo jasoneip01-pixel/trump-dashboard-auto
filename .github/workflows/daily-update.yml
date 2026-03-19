@@ -28,7 +28,7 @@ jobs:
           # 示例：pip install requests pandas 等，根据需要加
 
       - name: Run daily update
-        run: python update.py      # 改成你的脚本名，如果是 .sh 就 bash update.sh
+      run: bash update.sh      # 改成 bash update.sh（或 ./update.sh，如果有 shebang）
 
       - name: Commit and push to gh-pages
         run: |
