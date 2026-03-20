@@ -8,18 +8,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 添加权限确保 Action 能够把生成的 HTML 推送到仓库
+    # 核心：必须开启写入权限，否则最后一步 push 会失败
     permissions:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # 升级到最新版本
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5 # 修正了这里：由 os-actions 改为 actions
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          cache: 'pip' # 开启缓存加快后续运行速度
+          # 已移除 cache: 'pip'，避免因缺少 requirements.txt 报错
 
       - name: Install dependencies
         run: |
@@ -35,6 +35,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          # 检查是否有文件更新，防止无更新时报错
           git add .
-          git commit -m "Auto-update terminal data" || exit 0
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update terminal data" && git push)
