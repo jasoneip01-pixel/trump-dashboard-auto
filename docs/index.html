@@ -1,86 +1,60 @@
 
         <!DOCTYPE html><html><head><meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            :root { --neon: #00FF66; --bg: #000; --red: #FF3333; --blue: #00CCFF; --amber: #FFB800; }
-            body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; margin: 0; }
-            .card { background: #080808; border: 1px solid #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 12px; }
-            .env-tag { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; background: #00CCFF; color: #000; }
-            .flex { display: flex; justify-content: space-between; align-items: center; }
-            .val { font-size: 28px; font-weight: 900; color: var(--neon); letter-spacing: -1px; }
-            .bar-bg { background: #222; height: 6px; width: 100%; border-radius: 3px; margin-top: 8px; }
-            .bar-fill { background: var(--neon); height: 100%; border-radius: 3px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-            td { padding: 15px 5px; border-bottom: 1px solid #111; font-size: 13px; }
-            .HEALTHY { color: var(--neon); } .DANGER { color: var(--red); font-weight: bold; }
+            body { background: #000; color: #eee; font-family: sans-serif; padding: 20px; }
+            .card { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th { text-align: left; color: #555; font-size: 12px; border-bottom: 2px solid #222; padding: 10px; }
+            td { padding: 15px 10px; border-bottom: 1px solid #1a1a1a; }
+            .tag { background: #222; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+            .act-STRONG { color: #00ff66; border: 1px solid #00ff66; padding: 2px 5px; }
+            .act-AVOID { color: #ff4444; opacity: 0.6; }
+            .act-HEDGE { background: #ff4444; color: #fff; padding: 2px 5px; }
         </style></head>
         <body>
-            <div class="flex" style="margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px;">
-                <b style="font-size: 18px; color: var(--blue);">TRUMP_CODE v25.1 FINAL</b>
-                <span class="env-tag">STABLE (稳健)</span>
-            </div>
-            
             <div class="card">
-                <div style="font-size: 11px; color: #444; margin-bottom: 10px; text-transform: uppercase;">核心情报实时量化 (AI-INTEL)</div>
-                <div style="font-size: 14px; line-height: 1.6; border-left: 3px solid var(--blue); padding-left: 15px;">BMO ACCELERATES U.S. GROWTH, SEEING PATH TO REACH TARGET QUICKER UBER FACES CLASS ACTION FOR ALLEGEDLY MISLEADING RIDERS WITH INACCURATE ARRIVAL TIMES</div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="card"><div>20D 市场收益</div><div class="val">-4.35%</div></div>
-                <div class="card"><div>VIX 压力</div><div class="val" style="color:#fff;">25.78</div></div>
-            </div>
-
-            <div class="card">
-                <div style="font-size: 11px; color: var(--amber); margin-bottom: 10px;">执行矩阵 (EXECUTION MATRIX)</div>
+                <h2>TRUMP_CODE 实战机会看板</h2>
+                <div style="color:#666; font-size:13px;">实时头条: BMO ACCELERATES U.S. GROWTH, SEEING PATH TO REACH TARGET QUICKER</div>
                 <table>
-                    <thead><tr style="color: #444; font-size: 11px;"><td>标的</td><td>10D表现</td><td>凯利建议</td><td>止盈进度</td><td>状态</td></tr></thead>
+                    <thead><tr><th>相关资产</th><th>分析维度</th><th>情绪极性</th><th>5D动量</th><th>机会得分</th><th>实战建议</th></tr></thead>
                     <tbody>
-                        
-                        <tr>
-                            <td><b>IWM</b><br><small style="color:#444;">244.52</small></td>
-                            <td class="HEALTHY">-3.4%</td>
-                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
-                            <td style="width: 120px;">
-                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
-                            </td>
-                            <td class="DANGER">DANGER</td>
-                        </tr>
-                        
-                        <tr>
-                            <td><b>BITO</b><br><small style="color:#444;">9.62</small></td>
-                            <td class="HEALTHY">+1.2%</td>
-                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
-                            <td style="width: 120px;">
-                                <div class="bar-bg"><div class="bar-fill" style="width:24%"></div></div>
-                            </td>
-                            <td class="HEALTHY">HEALTHY</td>
-                        </tr>
-                        
-                        <tr>
-                            <td><b>FXI</b><br><small style="color:#444;">35.43</small></td>
-                            <td class="HEALTHY">-2.9%</td>
-                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
-                            <td style="width: 120px;">
-                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
-                            </td>
-                            <td class="DANGER">DANGER</td>
-                        </tr>
-                        
-                        <tr>
-                            <td><b>QQQ</b><br><small style="color:#444;">586.53</small></td>
-                            <td class="HEALTHY">-3.5%</td>
-                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
-                            <td style="width: 120px;">
-                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
-                            </td>
-                            <td class="DANGER">DANGER</td>
-                        </tr>
-                        
-                    </tbody>
+            <tr>
+                <td><b>IWM</b><br><small>罗素2000</small></td>
+                <td><span class="tag">TRADE</span></td>
+                <td style="color:#00ff66">+0.06</td>
+                <td>-0.7%</td>
+                <td style="font-size:18px; font-weight:bold;">-1.82</td>
+                <td><b class="act-HOLD">HOLD</b></td>
+            </tr>
+        
+            <tr>
+                <td><b>BITO</b><br><small>比特币ETF</small></td>
+                <td><span class="tag">CRYPTO</span></td>
+                <td style="color:#00ff66">+0.10</td>
+                <td>-1.6%</td>
+                <td style="font-size:18px; font-weight:bold;">-7.88</td>
+                <td><b class="act-AVOID">AVOID</b></td>
+            </tr>
+        
+            <tr>
+                <td><b>QQQ</b><br><small>纳指100</small></td>
+                <td><span class="tag">TECH</span></td>
+                <td style="color:#00ff66">+0.18</td>
+                <td>-1.2%</td>
+                <td style="font-size:18px; font-weight:bold;">3.53</td>
+                <td><b class="act-HOLD">HOLD</b></td>
+            </tr>
+        
+            <tr>
+                <td><b>FXI</b><br><small>中国大盘ETF</small></td>
+                <td><span class="tag">GLOBAL</span></td>
+                <td style="color:#ff4444">+0.00</td>
+                <td>-2.3%</td>
+                <td style="font-size:18px; font-weight:bold;">-4.85</td>
+                <td><b class="act-AVOID">AVOID</b></td>
+            </tr>
+        </tbody>
                 </table>
-            </div>
-            <div style="text-align:center; font-size:10px; color:#222; margin-top: 20px;">
-                STABLE RELEASE v25.1 | 2026-03-20 15:34:31 UTC | RE-RUN SUCCESSFUL
             </div>
         </body></html>
         
