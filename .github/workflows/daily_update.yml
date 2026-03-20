@@ -1,0 +1,35 @@
+name: Daily Dashboard Update
+
+on:
+  schedule:
+    - cron: '30 20 * * 1-5'  # UTC 20:30 = 北京 4:30，周一至周五
+  workflow_dispatch:           # 允许手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests yfinance pandas numpy scipy --quiet
+
+      - name: Run data fetch + build dashboard
+        run: python fetch_and_build_dashboard.py
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          include_files: trump_dashboard.html
