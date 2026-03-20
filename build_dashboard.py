@@ -1,59 +1,74 @@
 import os, yfinance as yf, pandas as pd, numpy as np, requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
-# --- [量化因子库：增强型关键词] ---
-LOGIC_LIBRARY = {
-    "POLICY": {"keywords": ["TARIFF", "TRADE", "CHINA", "TAX", "DEAL"], "tk": "IWM", "side": "LONG", "desc": "政策博弈"},
-    "CRYPTO": {"keywords": ["BTC", "CRYPTO", "BITCOIN", "REGULATION"], "tk": "BITO", "side": "LONG", "desc": "数字资产溢价"},
-    "ENERGY": {"keywords": ["OIL", "ENERGY", "DRILL", "CLIMATE"], "tk": "XLE", "side": "LONG", "desc": "传统能源复苏"},
-    "TECH": {"keywords": ["AI", "NVDA", "SEMICONDUCTOR", "CHIP"], "tk": "QQQ", "side": "LONG", "desc": "科技成长因子"}
-}
-
-SUB_MODELS = [
-    {"id": "A3", "name": "relief_rocket", "win": 0.727, "asset": "IWM"},
-    {"id": "D3", "name": "volume_spike", "win": 0.702, "asset": "BTC"},
-    {"id": "D2", "name": "sig_change", "win": 0.700, "asset": "FXI"},
-    {"id": "B3", "name": "action_pre", "win": 0.667, "asset": "TSLA"}
+# --- [1. 核心模型配置库] ---
+MODELS = [
+    {"id": "A3", "tk": "IWM", "win": 0.72, "odds": 1.5, "tp_target": 0.05, "stop_loss": -0.04, "tag": "SmallCap"},
+    {"id": "D3", "tk": "BITO", "win": 0.70, "odds": 2.2, "tp_target": 0.12, "stop_loss": -0.07, "tag": "Crypto"},
+    {"id": "D2", "tk": "FXI", "win": 0.70, "odds": 1.8, "tp_target": 0.08, "stop_loss": -0.05, "tag": "China"},
+    {"id": "B3", "tk": "QQQ", "win": 0.67, "odds": 2.5, "tp_target": 0.06, "stop_loss": -0.03, "tag": "BigTech"}
 ]
 
-def fetch_intel():
+# --- [2. 决策辅助函数] ---
+def translate_intel(text):
+    dic = {"TARIFF": "关税", "TAX": "减税", "INFLATION": "通胀", "CRYPTO": "加密", "TRADE": "贸易", "FED": "联储"}
+    translated = text.upper()
+    for k, v in dic.items(): translated = translated.replace(k, f"【{v}】")
+    return translated[:75] + "..." if len(translated) > 75 else translated
+
+def calculate_kelly(p, b):
+    f = (b * p - (1 - p)) / b
+    return max(0, f * 0.5) # 半凯利风控
+
+def get_engine_data():
     api_key = os.getenv("ALPHAVANTAGE_API_KEY", "DEMO")
-    tickers = ["SPY", "IWM", "FXI", "BITO", "QQQ", "XLE"]
+    all_tk = ["SPY", "IWM", "FXI", "BITO", "QQQ", "VIX", "UUP"]
+    
     try:
-        # 获取行情
-        df = yf.download(tickers, period="6mo", interval="1d")['Close'].ffill()
-        rets = df.pct_change().dropna()
-
-        # 情绪引擎升级：多关键词匹配
-        news_res = requests.get(f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=25&apikey={api_key}').json()
-        feeds = news_res.get("feed", [])
+        df = yf.download(all_tk, period="6mo").ffill()['Close']
+        rets = df.pct_change()
         
-        active_signals = []
-        news_cloud = " ".join([n['title'].upper() for n in feeds])
+        # A. 流动性黑洞监测
+        usd_move = df['UUP'].pct_change(5).iloc[-1]
+        vix_val = df['VIX'].iloc[-1]
+        env_mode = "BLACK_HOLE" if usd_move > 0.015 and vix_val > 25 else "NORMAL"
         
-        for factor, cfg in LOGIC_LIBRARY.items():
-            if any(k in news_cloud for k in cfg['keywords']):
-                active_signals.append(cfg)
+        # B. 情报获取与翻译
+        news_res = requests.get(f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=15&apikey={api_key}').json()
+        raw_news = news_res.get("feed", [{}])[0].get("title", "Market Steady")
+        news_cloud = " ".join([n['title'].upper() for n in news_res.get("feed", [])])
 
-        # 动态权重分配 (Kelly-Lite)
-        if active_signals:
-            w = 1.0 / len(active_signals)
-            strat_ret = sum([rets[s['tk']] * (1 if s['side']=="LONG" else -1) * w for s in active_signals])
-        else:
-            strat_ret = rets['SPY'] * 0.5 + rets['IWM'] * 0.5 # 默认对冲模式
+        # C. 核心决策矩阵生成
+        decisions = []
+        for m in MODELS:
+            # 1. 信号共振检查
+            signal_hit = 1 if (m['tag'].upper() in news_cloud or m['tk'][:3] in news_cloud) else 0
+            
+            # 2. 仓位与止盈计算
+            recent_gain = (df[m['tk']].iloc[-1] / df[m['tk']].iloc[-10]) - 1 # 10日表现
+            kelly_pos = calculate_kelly(m['win'], m['odds']) if signal_hit else 0
+            tp_progress = min(100, max(0, (recent_gain / m['tp_target']) * 100)) if recent_gain > 0 else 0
+            
+            # 3. 回溯与安全边际
+            week_high = df[m['tk']].tail(5).max()
+            dist_to_stop = ((df[m['tk']].iloc[-1] / week_high) - 1) - m['stop_loss']
+            
+            decisions.append({
+                "id": m['id'], "tk": m['tk'], 
+                "pos": f"{kelly_pos*100:.1f}%",
+                "gain": f"{recent_gain*100:+.1f}%",
+                "tp_prog": tp_progress,
+                "safety": "SAFE" if dist_to_stop > 0.02 else "DANGER",
+                "action": "LONG" if (signal_hit and env_mode=="NORMAL") else "WAIT"
+            })
 
-        cum_ret = (1 + strat_ret).cumprod()
-        
         return {
-            "ret": f"{(cum_ret.iloc[-1]-1)*100:+.2f}%",
-            "sharpe": f"{(strat_ret.mean()*252)/(strat_ret.std()*np.sqrt(252)):.2f}",
-            "mdd": f"{((cum_ret / cum_ret.cummax()) - 1).min()*100:.2f}%",
-            "signals": active_signals if active_signals else [{"tk":"CASH", "side":"WAIT", "desc":"信号真空期"}],
-            "news": feeds[0]['title'] if feeds else "Market Sidelined",
-            "ts": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+            "ret": f"{(df['SPY'].iloc[-1]/df['SPY'].iloc[-20]-1)*100:+.2f}%",
+            "vix": f"{vix_val:.2f}", "env": env_mode,
+            "news_cn": translate_intel(raw_news), "news_en": raw_news,
+            "decisions": decisions, "ts": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         }
-    except Exception as e:
-        return {"error": str(e)}
+    except Exception as e: return {"error": str(e)}
 
 def render_ui(d):
     html = f"""
@@ -61,51 +76,59 @@ def render_ui(d):
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            :root {{ --neon: #00FF66; --bg: #000; --card: #0A0A0A; --border: #1A1A1A; --amber: #FFB800; }}
-            body {{ background: var(--bg); color: var(--neon); font-family: -apple-system, 'Inter', sans-serif; padding: 12px; margin: 0; }}
-            .card {{ background: var(--card); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px; }}
+            :root {{ --neon: #00FF66; --bg: #000; --red: #FF3333; --blue: #00CCFF; --amber: #FFB800; }}
+            body {{ background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 12px; margin: 0; }}
+            .card {{ background: #080808; border: 1px solid #1a1a1a; padding: 16px; margin-bottom: 12px; border-radius: 8px; }}
+            .env-tag {{ padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: bold; background: { 'var(--red)' if d['env']=='BLACK_HOLE' else 'var(--blue)' }; color: #000; }}
             .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
-            .val {{ font-size: 26px; font-weight: 900; letter-spacing: -1px; }}
-            .label {{ font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 4px; }}
-            .sig-box {{ border-left: 3px solid var(--amber); padding-left: 12px; margin: 12px 0; }}
-            table {{ width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px; }}
-            th {{ text-align: left; color: #444; border-bottom: 1px solid #111; padding: 8px 4px; }}
-            td {{ padding: 10px 4px; border-bottom: 1px solid #050505; }}
-            .up {{ color: var(--neon); }} .down {{ color: #FF3333; }}
+            .prog-bg {{ background: #222; height: 4px; border-radius: 2px; margin-top: 5px; }}
+            .prog-fill {{ height: 100%; background: var(--neon); transition: width 0.5s; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }}
+            td {{ padding: 12px 5px; border-bottom: 1px solid #111; }}
+            .action-tag {{ padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 3px; }}
+            .LONG {{ background: var(--neon); color: #000; }}
+            .WAIT {{ background: #222; color: #666; }}
         </style>
     </head>
     <body>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <b style="font-size:14px; color:#fff;">TRUMP_CODE INTEL v14.0</b>
-            <span style="font-size:10px; color:#444;">{d['ts']} UTC</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom:10px;">
+            <b style="color:var(--neon);">TRUMP_CODE CORE V24.0</b>
+            <span class="env-tag">{d['env']} MODE</span>
+        </div>
+
+        <div class="card">
+            <div style="font-size:10px; color:#444; margin-bottom:8px;">AI 智能情报翻译</div>
+            <div style="font-size:13px; color:#fff; border-left: 3px solid var(--blue); padding-left: 10px;">{d['news_cn']}</div>
+            <div style="font-size:9px; color:#333; margin-top:5px;">{d['news_en']}</div>
         </div>
 
         <div class="grid">
-            <div class="card"><div class="label">自驾引擎收益</div><div class="val { 'up' if '+' in d['ret'] else 'down' }">{d['ret']}</div></div>
-            <div class="card"><div class="label">夏普比率 (Sharpe)</div><div class="val" style="color:#fff;">{d['sharpe']}</div></div>
+            <div class="card"><div style="font-size:10px; color:#444;">20D 市场基准收益</div><div style="font-size:24px; font-weight:bold; color:var(--neon);">{d['ret']}</div></div>
+            <div class="card"><div style="font-size:10px; color:#444;">VIX 风险水位</div><div style="font-size:24px; font-weight:bold;">{d['vix']}</div></div>
         </div>
 
         <div class="card">
-            <div class="label" style="color:var(--amber)">● 信号穿透与调仓指令 (Active Signals)</div>
-            {"".join([f"<div class='sig-box'><b style='color:#fff;'>{s['tk']} | {s['side']}</b><br><span style='color:var(--amber); font-size:11px;'>{s['desc']}</span></div>" for s in d['signals']])}
-        </div>
-
-        <div class="card">
-            <div class="label">核心子模型胜率 (Win Rate Matrix)</div>
+            <div style="font-size:10px; color:var(--amber); margin-bottom:10px;">● 综合执行矩阵 (Execution Matrix)</div>
             <table>
-                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th></tr></thead>
+                <thead><tr style="color:#444;"><td>标的</td><td>指令</td><td>凯利建议</td><td>止盈进度</td><td>安全</td></tr></thead>
                 <tbody>
-                    {"".join([f"<tr><td>{m['id']}</td><td style='color:#fff;'>{m['win']*100:.1f}%</td><td>{m['asset']}</td></tr>" for m in SUB_MODELS])}
+                    {"".join([f'''
+                    <tr>
+                        <td><b>{o['tk']}</b><br><small style="color:#444;">{o['gain']}</small></td>
+                        <td><span class="action-tag {o['action']}">{o['action']}</span></td>
+                        <td style="color:var(--blue);">{o['pos']}</td>
+                        <td><div class="prog-bg"><div class="prog-fill" style="width:{o['tp_prog']}%;"></div></div></td>
+                        <td style="color:{'var(--neon)' if o['safety']=='SAFE' else 'var(--red)'};">{o['safety']}</td>
+                    </tr>
+                    ''' for o in d['decisions']])}
                 </tbody>
             </table>
         </div>
 
-        <div class="card" style="border-color:#333;">
-            <div class="label">风控监控 (Risk MDD)</div>
-            <div class="val down" style="font-size:18px;">{d['mdd']}</div>
-            <div style="font-size:10px; color:#222; margin-top:10px;">适配全机型终端 | 动态权重分仓已启动</div>
+        <div style="text-align:center; font-size:9px; color:#222; margin-top:15px;">
+            INTELLIGENCE v24.0 | RE-INVESTMENT ACTIVE | {d['ts']} UTC
         </div>
     </body>
     </html>
@@ -114,5 +137,5 @@ def render_ui(d):
     with open('docs/index.html', 'w', encoding='utf-8') as f: f.write(html)
 
 if __name__ == "__main__":
-    intel = fetch_intel()
-    if "error" not in intel: render_ui(intel)
+    data = get_engine_data()
+    if "error" not in data: render_ui(data)
