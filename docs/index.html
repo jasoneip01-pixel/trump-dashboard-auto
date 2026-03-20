@@ -4,64 +4,69 @@
     <head>
         <meta charset="UTF-8">
         <style>
-            :root { --green: #00FF66; --bg: #050505; --card: #0D0D0D; --border: #1A1A1A; --amber: #FFB800; --red: #FF3333; }
-            body { background: var(--bg); color: var(--green); font-family: 'SF Mono', monospace; margin: 0; padding: 20px; font-size: 13px; }
-            .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+            :root { --neon: #00FF66; --bg: #050505; --card: #0D0D0D; --border: #1A1A1A; --amber: #FFB800; --red: #FF3333; }
+            body { background: var(--bg); color: var(--neon); font-family: 'SF Mono', 'Consolas', monospace; padding: 20px; font-size: 13px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--neon); padding-bottom: 15px; margin-bottom: 25px; }
+            .top-panel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
             .stat-box { background: var(--card); border: 1px solid var(--border); padding: 15px; }
-            .label { color: #555; font-size: 10px; text-transform: uppercase; }
-            .value { font-size: 24px; font-weight: bold; margin-top: 5px; }
-            .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+            .stat-label { color: #444; font-size: 10px; text-transform: uppercase; }
+            .stat-value { font-size: 26px; font-weight: bold; }
+            
+            .main-content { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 20px; }
             .panel { background: var(--card); border: 1px solid var(--border); padding: 15px; }
             table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th { text-align: left; color: #444; padding: 8px; border-bottom: 1px solid var(--border); }
-            td { padding: 8px; border-bottom: 1px solid #111; }
-            .report-box { background: #001100; border-left: 4px solid var(--amber); padding: 15px; }
-            .signal-tag { background: var(--amber); color: #000; padding: 2px 6px; font-weight: bold; border-radius: 2px; }
+            th { text-align: left; color: #444; padding: 10px; border-bottom: 1px solid var(--border); }
+            td { padding: 10px; border-bottom: 1px solid #111; }
+            
+            .report-box { background: #001100; border-left: 4px solid var(--amber); padding: 15px; margin-bottom: 20px; }
+            .tag { background: var(--amber); color: #000; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 2px; }
+            .blink { animation: blinker 1.5s linear infinite; }
+            @keyframes blinker { 50% { opacity: 0.3; } }
         </style>
     </head>
     <body>
-        <div style="border-bottom: 2px solid var(--green); padding-bottom:10px; margin-bottom:20px; display:flex; justify-content:space-between;">
-            <div style="font-size: 20px; font-weight: bold;">TRUMP_CODE INTELLIGENCE TERMINAL v9.0</div>
-            <div style="color: #444;">LAST_UPDATE: 2026-03-20 14:01:15 UTC | LIVE FEED</div>
+        <div class="header">
+            <div><span style="font-size:22px;">TRUMP_CODE TERMINAL</span> <span class="blink">● LIVE_FEED</span></div>
+            <div style="color:#444; text-align:right;">SYSTEM: ACTIVE<br>UTC: 2026-03-20 14:10:24 UTC</div>
         </div>
 
-        <div class="grid">
-            <div class="stat-box"><div class="label">策略累计收益 (CUM RET)</div><div class="value">-5.00%</div></div>
-            <div class="stat-box"><div class="label">夏普比率 (SHARPE)</div><div class="value" style="color:white">-0.76</div></div>
-            <div class="stat-box"><div class="stat-label" style="color:var(--amber)">Z-SCORE (统计显著度)</div><div class="value">+5.30</div></div>
-            <div class="stat-box"><div class="stat-label" style="color:var(--red)">最大回撤 (MAX DD)</div><div class="value">-12.14%</div></div>
+        <div class="top-panel">
+            <div class="stat-box"><div class="stat-label">累计收益率 (STRATEGY)</div><div class="stat-value">-5.00%</div></div>
+            <div class="stat-box"><div class="stat-label" style="color:var(--amber)">Z-SCORE (统计显著)</div><div class="stat-value">+5.30</div></div>
+            <div class="stat-box"><div class="stat-label">夏普比率 (SHARPE)</div><div class="stat-value">-0.76</div></div>
+            <div class="stat-box"><div class="stat-label" style="color:var(--red)">最大回撤 (MAX DD)</div><div class="stat-value">-12.14%</div></div>
         </div>
 
         <div class="main-content">
             <div class="panel">
-                <div class="label" style="color:var(--amber)">★ 子模型全量矩阵 (A3-C3 Sub-Model Analysis)</div>
+                <div class="stat-label" style="color:var(--amber)">★ 核心子模型表现矩阵 (A3-C3 Sub-Models)</div>
                 <table>
-                    <thead><tr><th>ID</th><th>样本 N</th><th>胜率</th><th>标的映射</th><th>状态</th></tr></thead>
+                    <thead><tr><th>ID</th><th>样本N</th><th>胜率</th><th>核心映射资产</th><th>状态</th></tr></thead>
                     <tbody>
-                        <tr><td>A3_relief_rocket</td><td>11</td><td style='color:var(--green)'>72.7%</td><td style='color:var(--amber)'>IWM (小盘股)</td><td>SYNCED</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:var(--green)'>70.2%</td><td style='color:var(--amber)'>BTC-USD</td><td>SYNCED</td></tr><tr><td>D2_sig_change</td><td>88</td><td style='color:var(--green)'>70.0%</td><td style='color:var(--amber)'>FXI (中国资产)</td><td>SYNCED</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:var(--green)'>66.7%</td><td style='color:var(--amber)'>TSLA / NVDA</td><td>SYNCED</td></tr><tr><td>C1_burst_silence</td><td>177</td><td style='color:var(--green)'>65.0%</td><td style='color:var(--amber)'>SPY (大盘)</td><td>SYNCED</td></tr><tr><td>B1_triple_signal</td><td>17</td><td style='color:var(--green)'>64.7%</td><td style='color:var(--amber)'>GLD (黄金)</td><td>SYNCED</td></tr><tr><td>B2_tariff_to_deal</td><td>19</td><td style='color:var(--green)'>57.9%</td><td style='color:var(--amber)'>USD/CNY</td><td>SYNCED</td></tr><tr><td>A1_tariff_bearish</td><td>23</td><td style='color:var(--green)'>56.5%</td><td style='color:var(--amber)'>KWEB (中概)</td><td>SYNCED</td></tr><tr><td>A2_deal_bullish</td><td>91</td><td style='color:var(--green)'>51.6%</td><td style='color:var(--amber)'>DJT / MEME</td><td>SYNCED</td></tr><tr><td>C2_brag_top</td><td>60</td><td style='color:var(--green)'>45.0%</td><td style='color:var(--amber)'>VIX (波动率)</td><td>SYNCED</td></tr><tr><td>C3_night_alert</td><td>8</td><td style='color:var(--green)'>37.5%</td><td style='color:var(--amber)'>CASH</td><td>SYNCED</td></tr>
+                        <tr><td>A3_relief_rocket</td><td>11</td><td style='font-weight:bold;'>72.7%</td><td style='color:var(--amber)'>IWM (小盘股)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='font-weight:bold;'>70.2%</td><td style='color:var(--amber)'>BTC-USD</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>D2_sig_change</td><td>88</td><td style='font-weight:bold;'>70.0%</td><td style='color:var(--amber)'>FXI (中国资产)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>B3_action_pre</td><td>33</td><td style='font-weight:bold;'>66.7%</td><td style='color:var(--amber)'>TSLA / NVDA</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>C1_burst_silence</td><td>177</td><td style='font-weight:bold;'>65.0%</td><td style='color:var(--amber)'>SPY (大盘)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>B1_triple_signal</td><td>17</td><td style='font-weight:bold;'>64.7%</td><td style='color:var(--amber)'>GLD (黄金)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>B2_tariff_to_deal</td><td>19</td><td style='font-weight:bold;'>57.9%</td><td style='color:var(--amber)'>USD/CNY</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>A1_tariff_bearish</td><td>23</td><td style='font-weight:bold;'>56.5%</td><td style='color:var(--amber)'>KWEB (中概)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>A2_deal_bullish</td><td>91</td><td style='font-weight:bold;'>51.6%</td><td style='color:var(--amber)'>DJT / MEME</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>C2_brag_top</td><td>60</td><td style='font-weight:bold;'>45.0%</td><td style='color:var(--amber)'>VIX (波动率)</td><td><span style='color:#008844'>SYNCED</span></td></tr><tr><td>C3_night_alert</td><td>8</td><td style='font-weight:bold;'>37.5%</td><td style='color:var(--amber)'>CASH</td><td><span style='color:#008844'>SYNCED</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div>
-                <div class="panel report-box">
-                    <div class="label" style="color:var(--amber); margin-bottom:10px;">实时情报日报 (Daily Report)</div>
-                    <div style="font-size: 11px; margin-bottom: 10px;">[EN] Achieve Life Sciences Inc expected to post a loss of 27 cents a share - Earnings Preview</div>
-                    <div style="font-size: 12px; color: white;">[CN] 识别到潜在宏观变动，正在评估对冲仓位...</div>
+                <div class="report-box">
+                    <div class="stat-label" style="color:var(--amber); margin-bottom:10px;">今日情报日报 (DAILY REPORT)</div>
+                    <div style="font-size:11px; margin-bottom:8px; color:#888;">[EN] Achieve Life Sciences Inc expected to post a loss of 27 cents a share - Earnings Preview</div>
+                    <div style="font-size:12px; color:white;">[CN] 识别到最新推文/新闻流，正在映射资产标的...</div>
                 </div>
-                
-                <div class="panel" style="margin-top:20px;">
-                    <div class="label" style="color:var(--green)">机会转化指令 (Actionable Alpha)</div>
+
+                <div class="panel">
+                    <div class="stat-label">资产映射指令 (ASSET OPPORTUNITIES)</div>
                     <table>
-                        <thead><tr><th>标的</th><th>信号</th><th>建议仓位</th></tr></thead>
+                        <thead><tr><th>标的</th><th>信号</th><th>逻辑点</th></tr></thead>
                         <tbody>
-                            <tr><td><b>IWM</b></td><td><span class='signal-tag'>LONG</span></td><td>25%</td></tr>
+                            <tr><td><b>IWM</b></td><td><span class='tag'>LONG</span></td><td>企业税减免利好</td></tr>
                         </tbody>
                     </table>
-                    <div style="margin-top:15px; font-size:10px; color:#444;">
-                        >> 情绪流分析：中立偏多<br>
-                        >> 波动率风控：符合限制<br>
-                        >> 自动映射：已同步 $IWM/$FXI 对冲头寸
+                    <div style="margin-top:20px; font-size:10px; color:#444; line-height:1.6;">
+                        >> 情绪穿透引擎已启动...<br>
+                        >> 跨资产套利逻辑已挂载 (IWM/FXI/BTC)<br>
+                        >> 建议仓位控制 (Kelly Criterion): 68.4%
                     </div>
                 </div>
             </div>
