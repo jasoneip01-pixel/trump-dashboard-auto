@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -28,11 +26,15 @@ jobs:
       - name: Run fetch and build
         run: python fetch_and_build_dashboard.py
 
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: gh-pages
-          include_files: trump_dashboard.html
-          force_orphan: true
+      - name: Copy to docs folder
+        run: |
+          mkdir -p docs
+          cp trump_dashboard.html docs/index.html
+
+      - name: Commit and push docs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/
+          git diff --staged --quiet || git commit -m "update dashboard $(date -u)"
+          git push
