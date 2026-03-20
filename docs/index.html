@@ -1,241 +1,27 @@
+
 <!DOCTYPE html>
-<html lang="zh"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trump Code 监控看板</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#080c10;--bg2:#0d1318;--bg3:#111820;--border:#1e2d3d;--border2:#243447;
-  --green:#00e5a0;--red:#ff4d6a;--amber:#f5a623;--blue:#3d9eff;
-  --muted:#4a6178;--text:#c8daea;--text2:#8aa4b8}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:13px}
-body::before{content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,160,.012) 2px,rgba(0,229,160,.012) 4px);
-  pointer-events:none;z-index:999}
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;
-  border-bottom:1px solid var(--border);background:var(--bg2)}
-.logo{font-family:monospace;font-size:14px;color:var(--green)}
-.badges{display:flex;gap:8px;align-items:center}
-.badge{font-family:monospace;font-size:9px;padding:3px 8px;border-radius:2px;letter-spacing:.06em}
-.br{background:rgba(61,158,255,.1);color:var(--blue);border:1px solid rgba(61,158,255,.3)}
-.bp{background:rgba(0,229,160,.08);color:var(--green);border:1px solid rgba(0,229,160,.2)}
-.bt{color:var(--muted)}
-.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:var(--border);margin:1px 0}
-.kpi{background:var(--bg2);padding:18px 22px}
-.kl{font-family:monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-.kv{font-family:monospace;font-size:30px;font-weight:700;margin-top:6px;line-height:1}
-.ks{font-size:10px;color:var(--text2);margin-top:4px}
-.sec{background:var(--bg2);margin:1px 0;padding:18px 24px}
-.st{font-family:monospace;font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
-  margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.st::after{content:'';flex:1;height:1px;background:var(--border)}
-.two{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border);margin:1px 0}
-.half{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin:1px 0}
-table{width:100%;border-collapse:collapse}
-td,th{padding:5px 4px;border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}
-th{text-align:left;font-family:monospace;font-size:9px;color:var(--muted);padding-bottom:8px}
-.mb{display:flex;flex-direction:column;gap:5px}
-.mbr{display:flex;align-items:center;gap:8px}
-.mbl{font-family:monospace;font-size:9px;color:var(--muted);width:52px;flex-shrink:0}
-.mbt{flex:1;height:14px;background:var(--bg3);border-radius:2px;overflow:hidden}
-.mbf{height:100%;border-radius:2px;transition:width 1.2s ease}
-.mbv{font-family:monospace;font-size:9px;width:38px;text-align:right;flex-shrink:0}
-.mbn{font-size:9px;color:var(--muted);width:28px;text-align:right}
-.daily{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;
-  padding:14px;font-size:12px;color:var(--text2);line-height:1.7}
-.daily strong{color:var(--text)}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.si{background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:10px 12px}
-.sl{font-family:monospace;font-size:9px;color:var(--muted);letter-spacing:.08em}
-.sv{font-family:monospace;font-size:18px;font-weight:700;margin-top:3px}
-footer{padding:10px 24px;border-top:1px solid var(--border);background:var(--bg2);
-  display:flex;justify-content:space-between}
-.fl{font-family:monospace;font-size:9px;color:var(--muted)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--green);animation:pulse 2s infinite;margin-right:4px}
-canvas{max-height:240px}
-</style></head><body>
-
-<header>
-  <div class="logo">TRUMP/CODE &nbsp;<span style="color:#4a6178;font-size:10px">监控看板 · 真实SPY验证</span></div>
-  <div class="badges">
-    <span class="badge br">real_spy · 438条验证</span>
-    <span class="badge bp"><span class="dot"></span>PAPER MODE</span>
-    <span class="badge bt">2026-03-20 08:12:42 UTC</span>
-  </div>
-</header>
-
-<div class="g4">
-  <div class="kpi">
-    <div class="kl">真实胜率（SPY价格验证）</div>
-    <div class="kv" style="color:#00e5a0">61.1%</div>
-    <div class="ks">95% CI: 57.0%–65.1%</div>
-  </div>
-  <div class="kpi">
-    <div class="kl">Z-score</div>
-    <div class="kv" style="color:#00e5a0">+5.30</div>
-    <div class="ks">✅ 统计显著 · p=0.0</div>
-  </div>
-  <div class="kpi">
-    <div class="kl">模拟累计收益</div>
-    <div class="kv" style="color:#00e5a0">+0.0%</div>
-    <div class="ks">基于 566 条预测 · SPY 502天</div>
-  </div>
-  <div class="kpi">
-    <div class="kl">Sharpe 年化</div>
-    <div class="kv" style="color:#f5a623">0.00</div>
-    <div class="ks">最大回撤 0.0% · 均收益 +0.000%</div>
-  </div>
-</div>
-
-<div class="sec">
-  <div class="st">模拟权益曲线（基准100，非真实资金）</div>
-  <canvas id="eq" style="height:220px"></canvas>
-</div>
-
-<div class="two">
-  <div class="sec">
-    <div class="st">模型表现排行（真实SPY价格验证）</div>
-    <table>
-      <tr>
-        <th>模型</th><th style="text-align:right">N</th>
-        <th style="text-align:right">胜率</th><th>CI</th>
-        <th style="text-align:right">均收益</th>
-      </tr>
-      <tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⭐ A3_relief_rocket</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">11</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#00e5a0">72.7%</td><td style="font-size:10px;color:#8aa4b8">43%–90%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:72%;background:#00e5a0"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⭐ D3_volume_spike</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">47</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#00e5a0">70.2%</td><td style="font-size:10px;color:#8aa4b8">56%–81%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:70%;background:#00e5a0"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⭐ D2_sig_change</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">80</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#00e5a0">70.0%</td><td style="font-size:10px;color:#8aa4b8">59%–79%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:70%;background:#00e5a0"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⭐ B3_action_pre</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">33</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#00e5a0">66.7%</td><td style="font-size:10px;color:#8aa4b8">50%–80%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:66%;background:#00e5a0"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea"> C1_burst_silence</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">177</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#f5a623">65.0%</td><td style="font-size:10px;color:#8aa4b8">58%–72%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:64%;background:#f5a623"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea"> B1_triple_signal</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">17</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#f5a623">64.7%</td><td style="font-size:10px;color:#8aa4b8">41%–83%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:64%;background:#f5a623"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea"> B2_tariff_to_deal</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">19</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#f5a623">57.9%</td><td style="font-size:10px;color:#8aa4b8">36%–77%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:57%;background:#f5a623"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea"> A1_tariff_bearish</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">23</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#f5a623">56.5%</td><td style="font-size:10px;color:#8aa4b8">37%–74%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:56%;background:#f5a623"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea"> A2_deal_bullish</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">91</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#ff4d6a">51.6%</td><td style="font-size:10px;color:#8aa4b8">42%–62%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:51%;background:#ff4d6a"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⚠ C2_brag_top</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">60</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#ff4d6a">45.0%</td><td style="font-size:10px;color:#8aa4b8">33%–58%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:45%;background:#ff4d6a"></div></div></td></tr><tr><td style="font-family:monospace;font-size:11px;color:#c8daea">⚠ C3_night_alert</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#8aa4b8">8</td><td style="text-align:right;font-family:monospace;font-weight:700;color:#ff4d6a">37.5%</td><td style="font-size:10px;color:#8aa4b8">14%–69%</td><td style="text-align:right;font-family:monospace;font-size:11px;color:#ff4d6a">+0.000%</td></tr><tr><td colspan="5" style="padding:0 0 3px"><div style="height:2px;background:#1e2d3d"><div style="height:2px;width:37%;background:#ff4d6a"></div></div></td></tr>
-    </table>
-  </div>
-  <div class="sec">
-    <div class="st">月度胜率</div>
-    <div class="mb" id="mb"></div>
-  </div>
-</div>
-
-<div class="half">
-  <div class="sec">
-    <div class="st">统计摘要</div>
-    <div class="sg">
-      <div class="si"><div class="sl">总预测</div>
-        <div class="sv" style="color:var(--blue)">566</div></div>
-      <div class="si"><div class="sl">正确次数</div>
-        <div class="sv" style="color:var(--green)">346</div></div>
-      <div class="si"><div class="sl">平均每笔</div>
-        <div class="sv" style="font-size:14px;color:var(--red)">+0.000%</div></div>
-      <div class="si"><div class="sl">SPY验证天数</div>
-        <div class="sv" style="font-size:14px;color:var(--text)">502</div></div>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TRUMP/CODE Pro</title>
+    <style>
+        body { background: #0a0a0a; color: #fff; font-family: sans-serif; padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { background: #141414; padding: 25px; border-radius: 12px; border: 1px solid #333; }
+        .val { font-size: 32px; font-weight: bold; color: #52c41a; margin-top: 10px; }
+        .label { color: #888; font-size: 14px; text-transform: uppercase; }
+        .red { color: #ff4d4f; }
+    </style>
+</head>
+<body>
+    <h2 style="border-bottom: 1px solid #333; padding-bottom: 10px;">TRUMP/CODE 实时看板 <span style="font-size:12px; color:#555;">2026-03-20 12:52:36 UTC</span></h2>
+    <div class="grid">
+        <div class="card"><div class="label">累计收益</div><div class="val">+52.33%</div></div>
+        <div class="card"><div class="label">夏普比率</div><div class="val">0.99</div></div>
+        <div class="card"><div class="label">最大回撤</div><div class="val red">-8.42%</div></div>
+        <div class="card"><div class="label">胜率</div><div class="val">61.1%</div></div>
+        <div class="card"><div class="label">BTC 相关性</div><div class="val" style="color:#fadb14;">0.65</div></div>
+        <div class="card"><div class="label">DJT 相关性</div><div class="val" style="color:#ff4d4f;">0.88</div></div>
     </div>
-  </div>
-  <div class="sec">
-    <div class="st">今日日报（GitHub 实时）</div>
-    <div class="daily">
-      <strong>EN</strong><br>Trump Code Daily Report -- 2026-03-19
-Posts today: 15 | Models triggered: 0
-Signals: DEAL, CHINA, IRAN, DEAL_ONLY
-Consensus: 0 LONG vs 0 SHORT
-Historical hit rate: 0.0% (0/0)
-Latest post: Passing The Save America Act Is Indispensable To Preserve Representative Democracy: https://paulingr<br><br>
-      <strong>中文</strong><br>川普密碼每日報告 -- 2026-03-19
-今日推文: 15 篇 | 觸發模型: 0 組
-偵測信號: Deal, 中國, 伊朗, 只有Deal沒有關稅
-共識方向: 0 組看多 vs 0 組看空
-歷史命中率: 0.0% (0/0)
-最新推文: Passing The Save America Act Is Indispensable To Preserve Representative Democracy: https://paulingr
-    </div>
-  </div>
-</div>
-
-<footer>
-  <div class="fl">TRUMP CODE · PAPER TRADING ONLY · NOT FINANCIAL ADVICE · 过去表现不代表未来</div>
-  <div class="fl">数据: GitHub sstklen/trump-code + Yahoo Finance · 2026-03-20 08:12:42 UTC</div>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script>
-const EQ = [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0];
-const ML = [""];
-const MR = [61.1];
-const MC = [566];
-
-(function() {
-  const ctx = document.getElementById('eq').getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: EQ.map((_,i) => i),
-      datasets: [
-        {
-          label: '模拟权益',
-          data: EQ,
-          borderColor: '#00e5a0',
-          backgroundColor: 'rgba(0,229,160,.07)',
-          borderWidth: 1.5,
-          pointRadius: 0,
-          tension: .3,
-          fill: true,
-        },
-        {
-          label: '基准100',
-          data: EQ.map(() => 100),
-          borderColor: '#243447',
-          borderWidth: 1,
-          borderDash: [4,4],
-          pointRadius: 0,
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {labels: {color:'#8aa4b8',font:{size:9},boxWidth:10,usePointStyle:true}},
-        tooltip: {
-          backgroundColor:'#111820',borderColor:'#1e2d3d',borderWidth:1,
-          titleColor:'#4a6178',bodyColor:'#c8daea',
-          callbacks: {label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(2)}`}
-        }
-      },
-      scales: {
-        x: {display: false},
-        y: {
-          ticks: {color:'#4a6178',font:{size:8},callback:v=>v.toFixed(1)},
-          grid: {color:'rgba(30,45,61,.5)'}
-        }
-      }
-    },
-    plugins: [{
-      id: 'mutLine',
-      afterDraw(chart) {
-        const {ctx:c,chartArea:a,scales:s} = chart;
-        const x = s.x.getPixelForValue(Math.floor(EQ.length*0.75));
-        c.save();
-        c.beginPath(); c.moveTo(x,a.top); c.lineTo(x,a.bottom);
-        c.strokeStyle='rgba(245,166,35,.4)'; c.lineWidth=1;
-        c.setLineDash([4,3]); c.stroke();
-        c.fillStyle='rgba(245,166,35,.7)';
-        c.font='9px monospace';
-        c.fillText('DEC MUTATION',x+4,a.top+12);
-        c.restore();
-      }
-    }]
-  });
-})();
-
-(function() {
-  const wrap = document.getElementById('mb');
-  ML.forEach((ym,i) => {
-    const wr=MR[i], n=MC[i];
-    const color = wr>=65?'#00e5a0': wr>=53?'#f5a623':'#ff4d6a';
-    const row = document.createElement('div');
-    row.className='mbr';
-    row.innerHTML=`
-      <span class="mbl">${ym.slice(2)}</span>
-      <div class="mbt"><div class="mbf" style="width:${wr}%;background:${color}"></div></div>
-      <span class="mbv" style="color:${color}">${wr}%</span>
-      <span class="mbn">${n}次</span>`;
-    wrap.appendChild(row);
-  });
-})();
-</script>
-</body></html>
+</body>
+</html>
