@@ -2,14 +2,16 @@ name: Daily Dashboard Update
 
 on:
   schedule:
-    - cron: '30 20 * * 1-5'  # UTC 20:30 = 北京 4:30，周一至周五
-  workflow_dispatch:           # 允许手动触发
+    - cron: '30 20 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -23,13 +25,14 @@ jobs:
       - name: Install dependencies
         run: pip install requests yfinance pandas numpy scipy --quiet
 
-      - name: Run data fetch + build dashboard
+      - name: Run fetch and build
         run: python fetch_and_build_dashboard.py
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
           include_files: trump_dashboard.html
+          force_orphan: true
