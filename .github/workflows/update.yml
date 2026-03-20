@@ -2,20 +2,24 @@ name: Daily Dashboard Update
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 0 点运行
-  workflow_dispatch: # 允许手动点击运行
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # 添加权限确保 Action 能够把生成的 HTML 推送到仓库
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 升级到最新版本
 
       - name: Set up Python
-        uses: os-actions/setup-python@v4
+        uses: actions/setup-python@v5 # 修正了这里：由 os-actions 改为 actions
         with:
           python-version: '3.9'
+          cache: 'pip' # 开启缓存加快后续运行速度
 
       - name: Install dependencies
         run: |
