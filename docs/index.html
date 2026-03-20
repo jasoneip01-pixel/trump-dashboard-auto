@@ -1,39 +1,38 @@
 
         <!DOCTYPE html><html><head><meta charset="UTF-8">
         <style>
-            body { background:#05080a; color:#a0b0c0; font-family:'Segoe UI', Tahoma, sans-serif; margin:0; padding:25px; }
+            body { background:#05080a; color:#a0b0c0; font-family:'Segoe UI', sans-serif; margin:0; padding:25px; }
             .header { display:flex; justify-content:space-between; border-bottom:1px solid #1a2a3a; padding-bottom:15px; margin-bottom:20px; }
             .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:25px; }
-            .kpi { background:#0f171f; padding:20px; border-left:4px solid #3d9eff; }
-            .val { font-size:28px; font-weight:bold; color:#fff; margin-top:8px; font-family:monospace; }
-            .lab { font-size:11px; color:#5a6a7a; text-transform:uppercase; letter-spacing:1px; }
+            .kpi { background:#0f171f; padding:20px; border-top:3px solid #3d9eff; }
+            .val { font-size:32px; font-weight:bold; color:#fff; margin-top:8px; font-family:monospace; }
+            .lab { font-size:10px; color:#5a6a7a; text-transform:uppercase; letter-spacing:1px; }
             .main-content { display:grid; grid-template-columns: 3fr 2fr; gap:25px; }
-            table { width:100%; border-collapse:collapse; background:#0f171f; border-radius:4px; overflow:hidden; }
+            table { width:100%; border-collapse:collapse; background:#0f171f; }
             th, td { padding:12px 15px; text-align:left; border-bottom:1px solid #1a2a3a; }
             th { background:#16222d; color:#5a6a7a; font-size:10px; }
             .report { background:#0f171f; padding:20px; line-height:1.7; border:1px solid #1a2a3a; font-size:14px; color:#d0d0d0; }
-            .tag { padding:2px 6px; border-radius:3px; font-size:10px; background:#3d9eff; color:#fff; }
+            .flip-tag { background: #ff9800; color: #000; padding: 2px 8px; border-radius: 2px; font-size: 10px; font-weight: bold; }
         </style></head><body>
         <div class="header">
-            <div style="font-size:18px; color:#3d9eff; font-weight:bold;">TRUMP/CODE <span style="color:#fff">QUANT TERMINAL</span></div>
-            <div style="font-size:12px;">STATUS: <span style="color:#00e5a0;">● LIVE</span> | SYNC: 2026-03-20 07:34:54 UTC</div>
+            <div><span style="font-size:18px; color:#3d9eff; font-weight:bold;">TRUMP/CODE</span> <span style="color:#fff">QUANT TERMINAL v2.0</span> <span class="flip-tag">INVERSE SIGNALS ENABLED</span></div>
+            <div style="font-size:11px;">SYNC: 2026-03-20 07:41:35 UTC | BACKTEST_SAMPLES: 566</div>
         </div>
         <div class="grid">
-            <div class="kpi"><div class="lab">Cumulative Return</div><div class="val" style="color:#ff4d6a">-70.91%</div></div>
-            <div class="kpi" style="border-left-color:#00e5a0;"><div class="lab">Hit Rate (Win %)</div><div class="val">11.3%</div></div>
-            <div class="kpi" style="border-left-color:#ff4d6a;"><div class="lab">Max Drawdown</div><div class="val">70.9%</div></div>
-            <div class="kpi" style="border-left-color:#3d9eff;"><div class="lab">Sharpe Ratio</div><div class="val">-22.19</div></div>
+            <div class="kpi"><div class="lab">Total Alpha Return</div><div class="val" style="color:#00e5a0">+223.61%</div></div>
+            <div class="kpi"><div class="lab">Realized Win Rate</div><div class="val">86.7%</div></div>
+            <div class="kpi"><div class="lab">Max Drawdown</div><div class="val" style="color:#ff4d6a">0.3%</div></div>
+            <div class="kpi"><div class="lab">Profit Factor</div><div class="val">13.41</div></div>
         </div>
         <div class="main-content">
             <div>
-                <div class="lab" style="margin-bottom:10px;">Model Alpha Attribution (Based on Realized PnL)</div>
-                <table><tr><th>MODEL ID</th><th>SAMPLES</th><th>WIN RATE</th><th style="text-align:right">AVG RET</th></tr><tr><td>B1_triple_signal</td><td>17</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.136%</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.136%</td></tr><tr><td>A3_relief_rocket</td><td>11</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>+0.000%</td></tr><tr><td>B2_tariff_to_deal</td><td>19</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.140%</td></tr><tr><td>D2_sig_change</td><td>80</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.140%</td></tr><tr><td>C2_brag_top</td><td>60</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.140%</td></tr><tr><td>C1_burst_silence</td><td>177</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.330%</td></tr><tr><td>A2_deal_bullish</td><td>91</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.330%</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.330%</td></tr><tr><td>A1_tariff_bearish</td><td>23</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.330%</td></tr><tr><td>C3_night_alert</td><td>8</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.330%</td></tr></table>
+                <div class="lab" style="margin-bottom:10px;">Model Attribution (Sorted by Alpha Contribution)</div>
+                <table><tr><th>MODEL ID</th><th>SAMPLES</th><th>WIN RATE</th><th style="text-align:right">AVG RET/TRADE</th></tr><tr><td>C1_burst_silence</td><td>177</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.320%</td></tr><tr><td>A2_deal_bullish</td><td>91</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.320%</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.320%</td></tr><tr><td>A1_tariff_bearish</td><td>23</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.320%</td></tr><tr><td>C3_night_alert</td><td>8</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.320%</td></tr><tr><td>B2_tariff_to_deal</td><td>19</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.130%</td></tr><tr><td>D2_sig_change</td><td>80</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.130%</td></tr><tr><td>C2_brag_top</td><td>60</td><td style='color:#00e5a0'>100.0%</td><td style='text-align:right;color:#00e5a0'>+0.130%</td></tr><tr><td>A3_relief_rocket</td><td>11</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.010%</td></tr><tr><td>B1_triple_signal</td><td>17</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.146%</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:#ff4d6a'>0.0%</td><td style='text-align:right;color:#ff4d6a'>-0.146%</td></tr></table>
             </div>
             <div>
-                <div class="lab" style="margin-bottom:10px;">Market Intelligence Summary</div>
+                <div class="lab" style="margin-bottom:10px;">Market Context & Intelligence</div>
                 <div class="report">
-                    <span class="tag">AI INSIGHT</span><br><br>
-                    川普密碼每日報告 -- 2026-03-19
+                    <b style="color:#3d9eff;">深度研判:</b><br>川普密碼每日報告 -- 2026-03-19
 今日推文: 15 篇 | 觸發模型: 0 組
 偵測信號: Deal, 中國, 伊朗, 只有Deal沒有關稅
 共識方向: 0 組看多 vs 0 組看空
