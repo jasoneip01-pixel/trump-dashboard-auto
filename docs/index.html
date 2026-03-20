@@ -1,60 +1,78 @@
 
         <!DOCTYPE html><html><head><meta charset="UTF-8">
         <style>
-            body { background: #000; color: #eee; font-family: sans-serif; padding: 20px; }
-            .card { background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th { text-align: left; color: #555; font-size: 12px; border-bottom: 2px solid #222; padding: 10px; }
-            td { padding: 15px 10px; border-bottom: 1px solid #1a1a1a; }
-            .tag { background: #222; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-            .act-STRONG { color: #00ff66; border: 1px solid #00ff66; padding: 2px 5px; }
-            .act-AVOID { color: #ff4444; opacity: 0.6; }
-            .act-HEDGE { background: #ff4444; color: #fff; padding: 2px 5px; }
+            body { background: #000; color: #ddd; font-family: -apple-system, sans-serif; padding: 20px; }
+            .asset-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 8px; }
+            .row-top { display: flex; justify-content: space-between; margin-bottom: 15px; }
+            .score-tag { background: #1a3a2a; color: #00ff88; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
+            .metrics { display: flex; gap: 20px; font-size: 13px; color: #888; margin-bottom: 12px; }
+            .BULL { color: #00ff88; } .BEAR { color: #ff4444; } .NEUTRAL { color: #888; }
+            .reason { font-size: 13px; color: #bbb; margin-bottom: 8px; border-left: 2px solid #333; padding-left: 10px; }
+            .headline { font-size: 11px; color: #555; }
+            .vix-bar { font-size: 12px; color: #444; margin-bottom: 20px; text-align: right; }
         </style></head>
         <body>
-            <div class="card">
-                <h2>TRUMP_CODE 实战机会看板</h2>
-                <div style="color:#666; font-size:13px;">实时头条: BMO ACCELERATES U.S. GROWTH, SEEING PATH TO REACH TARGET QUICKER</div>
-                <table>
-                    <thead><tr><th>相关资产</th><th>分析维度</th><th>情绪极性</th><th>5D动量</th><th>机会得分</th><th>实战建议</th></tr></thead>
-                    <tbody>
-            <tr>
-                <td><b>IWM</b><br><small>罗素2000</small></td>
-                <td><span class="tag">TRADE</span></td>
-                <td style="color:#00ff66">+0.06</td>
-                <td>-0.7%</td>
-                <td style="font-size:18px; font-weight:bold;">-1.82</td>
-                <td><b class="act-HOLD">HOLD</b></td>
-            </tr>
-        
-            <tr>
-                <td><b>BITO</b><br><small>比特币ETF</small></td>
-                <td><span class="tag">CRYPTO</span></td>
-                <td style="color:#00ff66">+0.10</td>
-                <td>-1.6%</td>
-                <td style="font-size:18px; font-weight:bold;">-7.88</td>
-                <td><b class="act-AVOID">AVOID</b></td>
-            </tr>
-        
-            <tr>
-                <td><b>QQQ</b><br><small>纳指100</small></td>
-                <td><span class="tag">TECH</span></td>
-                <td style="color:#00ff66">+0.18</td>
-                <td>-1.2%</td>
-                <td style="font-size:18px; font-weight:bold;">3.53</td>
-                <td><b class="act-HOLD">HOLD</b></td>
-            </tr>
-        
-            <tr>
-                <td><b>FXI</b><br><small>中国大盘ETF</small></td>
-                <td><span class="tag">GLOBAL</span></td>
-                <td style="color:#ff4444">+0.00</td>
-                <td>-2.3%</td>
-                <td style="font-size:18px; font-weight:bold;">-4.85</td>
-                <td><b class="act-AVOID">AVOID</b></td>
-            </tr>
-        </tbody>
-                </table>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                <h2 style="margin:0;">TRUMP_CODE 深度机会下钻</h2>
+                <div class="vix-bar">VIX: 25.9 | 03-20 15:43 UTC</div>
             </div>
+            <hr style="border:0; border-top:1px solid #222; margin: 20px 0;">
+            
+            <div class="asset-card">
+                <div class="row-top">
+                    <b style="font-size:18px;">IWM</b>
+                    <span class="score-tag">机会分: -2.4</span>
+                </div>
+                <div class="metrics">
+                    <span>情绪: <b class="NEUTRAL">NEUTRAL</b></span>
+                    <span>20D动量: <b>-6.1%</b></span>
+                    <span>年化波动: <b>18.5%</b></span>
+                </div>
+                <div class="reason"><b>驱动逻辑:</b> 无直接政策驱动</div>
+                <div class="headline"><b>最关联情报:</b> 跟随大盘波动</div>
+            </div>
+        
+            <div class="asset-card">
+                <div class="row-top">
+                    <b style="font-size:18px;">BITO</b>
+                    <span class="score-tag">机会分: 3.3</span>
+                </div>
+                <div class="metrics">
+                    <span>情绪: <b class="NEUTRAL">NEUTRAL</b></span>
+                    <span>20D动量: <b>+8.2%</b></span>
+                    <span>年化波动: <b>58.1%</b></span>
+                </div>
+                <div class="reason"><b>驱动逻辑:</b> 无直接政策驱动</div>
+                <div class="headline"><b>最关联情报:</b> 跟随大盘波动</div>
+            </div>
+        
+            <div class="asset-card">
+                <div class="row-top">
+                    <b style="font-size:18px;">QQQ</b>
+                    <span class="score-tag">机会分: -1.0</span>
+                </div>
+                <div class="metrics">
+                    <span>情绪: <b class="NEUTRAL">NEUTRAL</b></span>
+                    <span>20D动量: <b>-2.5%</b></span>
+                    <span>年化波动: <b>15.4%</b></span>
+                </div>
+                <div class="reason"><b>驱动逻辑:</b> 无直接政策驱动</div>
+                <div class="headline"><b>最关联情报:</b> 跟随大盘波动</div>
+            </div>
+        
+            <div class="asset-card">
+                <div class="row-top">
+                    <b style="font-size:18px;">FXI</b>
+                    <span class="score-tag">机会分: -3.4</span>
+                </div>
+                <div class="metrics">
+                    <span>情绪: <b class="NEUTRAL">NEUTRAL</b></span>
+                    <span>20D动量: <b>-8.5%</b></span>
+                    <span>年化波动: <b>20.9%</b></span>
+                </div>
+                <div class="reason"><b>驱动逻辑:</b> 无直接政策驱动</div>
+                <div class="headline"><b>最关联情报:</b> 跟随大盘波动</div>
+            </div>
+        
         </body></html>
         
