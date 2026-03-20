@@ -3,55 +3,51 @@
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
-            :root { --neon: #00FF66; --bg: #050505; --amber: #FFB800; --red: #FF3333; }
-            body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; padding: 15px; margin: 0; }
-            .box { background: #0D0D0D; border: 1px solid #1A1A1A; padding: 12px; margin-bottom: 10px; border-radius: 4px; }
-            .header { border-bottom: 2px solid var(--neon); padding-bottom: 10px; display: flex; justify-content: space-between; font-weight: bold; }
-            .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-            .label { color: #555; font-size: 10px; text-transform: uppercase; }
-            .val { font-size: 22px; font-weight: bold; }
-            .signal-item { border-left: 3px solid var(--amber); padding-left: 10px; margin: 10px 0; font-size: 13px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-            th { text-align: left; color: #444; border-bottom: 1px solid #1A1A1A; padding-bottom: 5px; }
-            td { padding: 8px 0; border-bottom: 1px solid #111; }
+            :root { --neon: #00FF66; --bg: #000; --card: #0A0A0A; --border: #1A1A1A; --amber: #FFB800; }
+            body { background: var(--bg); color: var(--neon); font-family: -apple-system, 'Inter', sans-serif; padding: 12px; margin: 0; }
+            .card { background: var(--card); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .val { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+            .label { font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 4px; }
+            .sig-box { border-left: 3px solid var(--amber); padding-left: 12px; margin: 12px 0; }
+            table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px; }
+            th { text-align: left; color: #444; border-bottom: 1px solid #111; padding: 8px 4px; }
+            td { padding: 10px 4px; border-bottom: 1px solid #050505; }
+            .up { color: var(--neon); } .down { color: #FF3333; }
         </style>
     </head>
     <body>
-        <div class="header">
-            <span>TRUMP_CODE INTELLIGENCE V13.0</span>
-            <span style="font-size:10px;">2026-03-20 14:33:05 UTC</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <b style="font-size:14px; color:#fff;">TRUMP_CODE INTEL v14.0</b>
+            <span style="font-size:10px; color:#444;">2026-03-20 15:13:02 UTC</span>
         </div>
 
-        <div class="stat-grid">
-            <div class="box"><div class="label">自驾引擎收益</div><div class="val">-4.70%</div></div>
-            <div class="box"><div class="label">夏普比率</div><div class="val" style="color:white">-1.37</div></div>
+        <div class="grid">
+            <div class="card"><div class="label">自驾引擎收益</div><div class="val up">+11.19%</div></div>
+            <div class="card"><div class="label">夏普比率 (Sharpe)</div><div class="val" style="color:#fff;">1.63</div></div>
         </div>
 
-        <div class="box">
-            <div class="label" style="color:var(--amber)">● 机会识别与自动调仓指令</div>
-            <div class='signal-item'><b>CASH | WAIT</b><br><span style='color:#888'>震荡市，现金避险</span></div>
+        <div class="card">
+            <div class="label" style="color:var(--amber)">● 信号穿透与调仓指令 (Active Signals)</div>
+            <div class='sig-box'><b style='color:#fff;'>IWM | LONG</b><br><span style='color:var(--amber); font-size:11px;'>政策博弈</span></div><div class='sig-box'><b style='color:#fff;'>XLE | LONG</b><br><span style='color:var(--amber); font-size:11px;'>传统能源复苏</span></div><div class='sig-box'><b style='color:#fff;'>QQQ | LONG</b><br><span style='color:var(--amber); font-size:11px;'>科技成长因子</span></div>
         </div>
 
-        <div class="box">
-            <div class="label">情报流摘要</div>
-            <div style="font-size:12px; color:white; margin-top:5px;">Barrick Gold’s $42 Billion Strategic Split: The "NewCo" Spin-Off and Newmont Standoff</div>
-        </div>
-
-        <div class="box">
-            <div class="label">子模型全量监控矩阵 (A3-C1)</div>
+        <div class="card">
+            <div class="label">核心子模型胜率 (Win Rate Matrix)</div>
             <table>
-                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th><th>风险</th></tr></thead>
+                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th></tr></thead>
                 <tbody>
-                    <tr><td>A3_relief_rocket</td><td style='color:var(--neon)'>72.7%</td><td>IWM</td><td>低</td></tr><tr><td>D3_volume_spike</td><td style='color:var(--neon)'>70.19999999999999%</td><td>BTC</td><td>高</td></tr><tr><td>D2_sig_change</td><td style='color:var(--neon)'>70.0%</td><td>FXI</td><td>中</td></tr><tr><td>B3_action_pre</td><td style='color:var(--neon)'>66.7%</td><td>TSLA</td><td>高</td></tr><tr><td>C1_burst_silence</td><td style='color:var(--neon)'>65.0%</td><td>SPY</td><td>低</td></tr><tr><td>B1_triple_signal</td><td style='color:var(--neon)'>64.7%</td><td>GLD</td><td>中</td></tr>
+                    <tr><td>A3</td><td style='color:#fff;'>72.7%</td><td>IWM</td></tr><tr><td>D3</td><td style='color:#fff;'>70.2%</td><td>BTC</td></tr><tr><td>D2</td><td style='color:#fff;'>70.0%</td><td>FXI</td></tr><tr><td>B3</td><td style='color:#fff;'>66.7%</td><td>TSLA</td></tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="box" style="border-color:var(--red)">
-            <div class="label" style="color:var(--red)">风控模型 (MDD CONTROL)</div>
-            <div class="val" style="color:var(--red)">-6.17%</div>
+        <div class="card" style="border-color:#333;">
+            <div class="label">风控监控 (Risk MDD)</div>
+            <div class="val down" style="font-size:18px;">-4.95%</div>
+            <div style="font-size:10px; color:#222; margin-top:10px;">适配全机型终端 | 动态权重分仓已启动</div>
         </div>
     </body>
     </html>
