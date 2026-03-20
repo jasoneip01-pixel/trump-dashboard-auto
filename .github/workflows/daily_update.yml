@@ -2,15 +2,15 @@ name: Daily Dashboard Update
 
 on:
   schedule:
-    # 对应北京时间 06:30 (UTC 22:30)
+    # 北京时间 06:30 (UTC 22:30)
     - cron: '30 22 * * *'
-  workflow_dispatch: # 允许手动点击 Run workflow 测试
+  workflow_dispatch: 
 
 jobs:
-  update-dashboard:
+  update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # 必须开启，否则无法 push 网页更新
+      contents: write
 
     steps:
       - name: Checkout Repository
@@ -26,25 +26,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
 
-      - name: Run Fetch and Build Script
+      - name: Run Fetch and Build
         run: python fetch_and_build_dashboard.py
 
-      - name: Deploy to GitHub Pages Folder
+      - name: Deploy Update
         run: |
-          # 确保 docs 目录存在
           mkdir -p docs
-          # 将生成的看板移动到 docs 目录作为 index.html
           cp trump_dashboard.html docs/index.html
-          
-          # 配置 Git 机器人信息
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
-          # 检查是否有内容变化，有则提交并推送
+          git config --local user.email "actions@github.com"
           git add docs/index.html
-          if git diff --staged --quiet; then
-            echo "No changes detected, skipping commit."
-          else
-            git commit -m "Auto-update dashboard: $(date +'%Y-%m-%d %H:%M:%S %Z')"
-            git push origin main
-          fi
+          # 仅在网页有实际内容变动时才推送
+          git diff --staged --quiet || (git commit -m "Auto-update: $(date)" && git push origin main)
