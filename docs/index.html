@@ -1,86 +1,86 @@
 
-    <!DOCTYPE html>
-    <html lang="zh">
-    <head>
-        <meta charset="UTF-8">
+        <!DOCTYPE html><html><head><meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             :root { --neon: #00FF66; --bg: #000; --red: #FF3333; --blue: #00CCFF; --amber: #FFB800; }
-            body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 12px; margin: 0; }
-            .card { background: #080808; border: 1px solid #1a1a1a; padding: 16px; margin-bottom: 12px; border-radius: 8px; }
-            .env-tag { padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: bold; background: var(--blue); color: #000; }
-            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .prog-bg { background: #222; height: 4px; border-radius: 2px; margin-top: 5px; }
-            .prog-fill { height: 100%; background: var(--neon); transition: width 0.5s; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-            td { padding: 12px 5px; border-bottom: 1px solid #111; }
-            .action-tag { padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 3px; }
-            .LONG { background: var(--neon); color: #000; }
-            .WAIT { background: #222; color: #666; }
-        </style>
-    </head>
-    <body>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom:10px;">
-            <b style="color:var(--neon);">TRUMP_CODE CORE V24.0</b>
-            <span class="env-tag">NORMAL MODE</span>
-        </div>
+            body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; margin: 0; }
+            .card { background: #080808; border: 1px solid #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 12px; }
+            .env-tag { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; background: #00CCFF; color: #000; }
+            .flex { display: flex; justify-content: space-between; align-items: center; }
+            .val { font-size: 28px; font-weight: 900; color: var(--neon); letter-spacing: -1px; }
+            .bar-bg { background: #222; height: 6px; width: 100%; border-radius: 3px; margin-top: 8px; }
+            .bar-fill { background: var(--neon); height: 100%; border-radius: 3px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            td { padding: 15px 5px; border-bottom: 1px solid #111; font-size: 13px; }
+            .HEALTHY { color: var(--neon); } .DANGER { color: var(--red); font-weight: bold; }
+        </style></head>
+        <body>
+            <div class="flex" style="margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px;">
+                <b style="font-size: 18px; color: var(--blue);">TRUMP_CODE v25.1 FINAL</b>
+                <span class="env-tag">STABLE (稳健)</span>
+            </div>
+            
+            <div class="card">
+                <div style="font-size: 11px; color: #444; margin-bottom: 10px; text-transform: uppercase;">核心情报实时量化 (AI-INTEL)</div>
+                <div style="font-size: 14px; line-height: 1.6; border-left: 3px solid var(--blue); padding-left: 15px;">BMO ACCELERATES U.S. GROWTH, SEEING PATH TO REACH TARGET QUICKER UBER FACES CLASS ACTION FOR ALLEGEDLY MISLEADING RIDERS WITH INACCURATE ARRIVAL TIMES</div>
+            </div>
 
-        <div class="card">
-            <div style="font-size:10px; color:#444; margin-bottom:8px;">AI 智能情报翻译</div>
-            <div style="font-size:13px; color:#fff; border-left: 3px solid var(--blue); padding-left: 10px;">WALL STREET ANALYSTS SEE AN 86.45% UPSIDE IN BIODESIX (BDSX): CAN THE STOCK...</div>
-            <div style="font-size:9px; color:#333; margin-top:5px;">Wall Street analysts see an 86.45% upside in Biodesix (BDSX): Can the stock really move this high?</div>
-        </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="card"><div>20D 市场收益</div><div class="val">-4.35%</div></div>
+                <div class="card"><div>VIX 压力</div><div class="val" style="color:#fff;">25.78</div></div>
+            </div>
 
-        <div class="grid">
-            <div class="card"><div style="font-size:10px; color:#444;">20D 市场基准收益</div><div style="font-size:24px; font-weight:bold; color:var(--neon);">-4.44%</div></div>
-            <div class="card"><div style="font-size:10px; color:#444;">VIX 风险水位</div><div style="font-size:24px; font-weight:bold;">nan</div></div>
-        </div>
-
-        <div class="card">
-            <div style="font-size:10px; color:var(--amber); margin-bottom:10px;">● 综合执行矩阵 (Execution Matrix)</div>
-            <table>
-                <thead><tr style="color:#444;"><td>标的</td><td>指令</td><td>凯利建议</td><td>止盈进度</td><td>安全</td></tr></thead>
-                <tbody>
-                    
-                    <tr>
-                        <td><b>IWM</b><br><small style="color:#444;">-3.6%</small></td>
-                        <td><span class="action-tag WAIT">WAIT</span></td>
-                        <td style="color:var(--blue);">0.0%</td>
-                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
-                        <td style="color:var(--red);">DANGER</td>
-                    </tr>
-                    
-                    <tr>
-                        <td><b>BITO</b><br><small style="color:#444;">+0.8%</small></td>
-                        <td><span class="action-tag LONG">LONG</span></td>
-                        <td style="color:var(--blue);">28.2%</td>
-                        <td><div class="prog-bg"><div class="prog-fill" style="width:7.010157884740353%;"></div></div></td>
-                        <td style="color:var(--red);">DANGER</td>
-                    </tr>
-                    
-                    <tr>
-                        <td><b>FXI</b><br><small style="color:#444;">-3.1%</small></td>
-                        <td><span class="action-tag WAIT">WAIT</span></td>
-                        <td style="color:var(--blue);">0.0%</td>
-                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
-                        <td style="color:var(--red);">DANGER</td>
-                    </tr>
-                    
-                    <tr>
-                        <td><b>QQQ</b><br><small style="color:#444;">-3.6%</small></td>
-                        <td><span class="action-tag WAIT">WAIT</span></td>
-                        <td style="color:var(--blue);">0.0%</td>
-                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
-                        <td style="color:var(--red);">DANGER</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </div>
-
-        <div style="text-align:center; font-size:9px; color:#222; margin-top:15px;">
-            INTELLIGENCE v24.0 | RE-INVESTMENT ACTIVE | 2026-03-20 15:26:50 UTC
-        </div>
-    </body>
-    </html>
-    
+            <div class="card">
+                <div style="font-size: 11px; color: var(--amber); margin-bottom: 10px;">执行矩阵 (EXECUTION MATRIX)</div>
+                <table>
+                    <thead><tr style="color: #444; font-size: 11px;"><td>标的</td><td>10D表现</td><td>凯利建议</td><td>止盈进度</td><td>状态</td></tr></thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td><b>IWM</b><br><small style="color:#444;">244.52</small></td>
+                            <td class="HEALTHY">-3.4%</td>
+                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
+                            <td style="width: 120px;">
+                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
+                            </td>
+                            <td class="DANGER">DANGER</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><b>BITO</b><br><small style="color:#444;">9.62</small></td>
+                            <td class="HEALTHY">+1.2%</td>
+                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
+                            <td style="width: 120px;">
+                                <div class="bar-bg"><div class="bar-fill" style="width:24%"></div></div>
+                            </td>
+                            <td class="HEALTHY">HEALTHY</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><b>FXI</b><br><small style="color:#444;">35.43</small></td>
+                            <td class="HEALTHY">-2.9%</td>
+                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
+                            <td style="width: 120px;">
+                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
+                            </td>
+                            <td class="DANGER">DANGER</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><b>QQQ</b><br><small style="color:#444;">586.53</small></td>
+                            <td class="HEALTHY">-3.5%</td>
+                            <td style="color:var(--blue); font-weight:bold;">0.0%</td>
+                            <td style="width: 120px;">
+                                <div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div>
+                            </td>
+                            <td class="DANGER">DANGER</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:center; font-size:10px; color:#222; margin-top: 20px;">
+                STABLE RELEASE v25.1 | 2026-03-20 15:34:31 UTC | RE-RUN SUCCESSFUL
+            </div>
+        </body></html>
+        
