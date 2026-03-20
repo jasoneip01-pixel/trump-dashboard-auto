@@ -1,33 +1,58 @@
 name: Daily Dashboard Update
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
-
-permissions:
-  contents: write
+    - cron: '0 0 * * *'  # 每天 UTC 0点自动运行
+  workflow_dispatch:      # 允许手动点击按钮触发
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取完整历史以支持 rebase
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
-      - name: Run logic
-        run: python fetch_and_build_dashboard.py
-
-      - name: Commit and Push
+      - name: Install Dependencies
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          if ! git diff --cached --quiet; then
-            git commit -m "🚀 强制刷新指标及路径: $(date)"
-            git push
+          pip install requests yfinance pandas numpy scipy --quiet
+          # 确保量化计算所需的库全部到位
+
+      - name: Run Quantitative Analysis
+        run: |
+          # 运行你的核心修复脚本
+          python fix_dashboard.py
+        working-directory: .
+
+      - name: Smart Deploy to GitHub Pages
+        run: |
+          # 配置机器人身份
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 确保 docs 目录存在
+          mkdir -p docs
+          cp trump_dashboard.html docs/index.html
+          
+          # 清理可能存在的杂质文件（保持仓库纯净）
+          rm -f "#" "docs/index.html.bak" "修改修改时间"
+          
+          # 核心：自动处理冲突的推送逻辑
+          git add docs/index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🚀 自动更新: 指标同步 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            
+            # 关键：先拉取再推送，防止和本地操作冲突
+            git pull origin main --rebase
+            git push origin main
           fi
