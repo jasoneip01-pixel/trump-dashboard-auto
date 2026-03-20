@@ -4,60 +4,65 @@
     <head>
         <meta charset="UTF-8">
         <style>
-            body { background: #010409; color: #adbac7; font-family: monospace; padding: 20px; }
-            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #238636; padding-bottom: 10px; }
-            .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
-            .metric-card { background: #0d1117; border: 1px solid #30363d; padding: 15px; border-radius: 4px; }
-            .label { font-size: 11px; color: #768390; }
-            .value { font-size: 24px; font-weight: bold; color: #3fb950; }
-            
-            .content-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
-            .section-title { font-size: 14px; color: #d29922; margin-bottom: 15px; border-left: 3px solid #d29922; padding-left: 10px; }
-            table { width: 100%; border-collapse: collapse; font-size: 11px; }
-            th, td { text-align: left; padding: 8px; border-bottom: 1px solid #222; }
-            
-            .opp-box { background: #161b22; border: 1px solid #d29922; padding: 15px; color: #adbac7; line-height: 1.8; }
-            .highlight { color: #58a6ff; }
+            :root { --green: #00FF66; --bg: #050505; --card: #0D0D0D; --border: #1A1A1A; --amber: #FFB800; --red: #FF3333; }
+            body { background: var(--bg); color: var(--green); font-family: 'SF Mono', monospace; margin: 0; padding: 20px; font-size: 13px; }
+            .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+            .stat-box { background: var(--card); border: 1px solid var(--border); padding: 15px; }
+            .label { color: #555; font-size: 10px; text-transform: uppercase; }
+            .value { font-size: 24px; font-weight: bold; margin-top: 5px; }
+            .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+            .panel { background: var(--card); border: 1px solid var(--border); padding: 15px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            th { text-align: left; color: #444; padding: 8px; border-bottom: 1px solid var(--border); }
+            td { padding: 8px; border-bottom: 1px solid #111; }
+            .report-box { background: #001100; border-left: 4px solid var(--amber); padding: 15px; }
+            .signal-tag { background: var(--amber); color: #000; padding: 2px 6px; font-weight: bold; border-radius: 2px; }
         </style>
     </head>
     <body>
-        <div class="header">
-            <div style="font-size: 20px;">TRUMP/CODE <span style="font-weight:100;">Intelligence Terminal V8.0</span></div>
-            <div style="font-size:12px; color:#444;">LAST_SYNC: 2026-03-20 13:49:05 UTC</div>
+        <div style="border-bottom: 2px solid var(--green); padding-bottom:10px; margin-bottom:20px; display:flex; justify-content:space-between;">
+            <div style="font-size: 20px; font-weight: bold;">TRUMP_CODE INTELLIGENCE TERMINAL v9.0</div>
+            <div style="color: #444;">LAST_UPDATE: 2026-03-20 14:01:15 UTC | LIVE FEED</div>
         </div>
 
-        <div class="metric-grid">
-            <div class="metric-card"><div class="label">累计收益率 (STRATEGY)</div><div class="value">-8.29%</div></div>
-            <div class="metric-card"><div class="label">基准胜率 (HISTORICAL)</div><div class="value">61.1%</div></div>
-            <div class="metric-card"><div class="label">Z-SCORE (统计显著性)</div><div class="value">+5.30</div></div>
-            <div class="metric-card"><div class="label">夏普比率 (SHARPE)</div><div class="value">-1.12</div></div>
+        <div class="grid">
+            <div class="stat-box"><div class="label">策略累计收益 (CUM RET)</div><div class="value">-5.00%</div></div>
+            <div class="stat-box"><div class="label">夏普比率 (SHARPE)</div><div class="value" style="color:white">-0.76</div></div>
+            <div class="stat-box"><div class="stat-label" style="color:var(--amber)">Z-SCORE (统计显著度)</div><div class="value">+5.30</div></div>
+            <div class="stat-box"><div class="stat-label" style="color:var(--red)">最大回撤 (MAX DD)</div><div class="value">-12.14%</div></div>
         </div>
 
-        <div class="content-grid">
-            <div>
-                <div class="section-title">子模型胜率与机会监控</div>
+        <div class="main-content">
+            <div class="panel">
+                <div class="label" style="color:var(--amber)">★ 子模型全量矩阵 (A3-C3 Sub-Model Analysis)</div>
                 <table>
-                    <thead><tr><th>模型</th><th>样本N</th><th>胜率</th><th>机会点映射</th></tr></thead>
+                    <thead><tr><th>ID</th><th>样本 N</th><th>胜率</th><th>标的映射</th><th>状态</th></tr></thead>
                     <tbody>
-                        <tr><td>A3_relief_rocket</td><td>11</td><td style='color:#3fb950'>72.7%</td><td style='color:#8b949e'>政策底部反弹，做多 IWM</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:#3fb950'>70.2%</td><td style='color:#8b949e'>放量突破，追随 BTC 动能</td></tr><tr><td>D2_sig_change</td><td>88</td><td style='color:#3fb950'>70.0%</td><td style='color:#8b949e'>趋势反转，做空 FXI (对冲)</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:#3fb950'>66.7%</td><td style='color:#8b949e'>事件前瞻，布局 TSLA 波动</td></tr>
+                        <tr><td>A3_relief_rocket</td><td>11</td><td style='color:var(--green)'>72.7%</td><td style='color:var(--amber)'>IWM (小盘股)</td><td>SYNCED</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:var(--green)'>70.2%</td><td style='color:var(--amber)'>BTC-USD</td><td>SYNCED</td></tr><tr><td>D2_sig_change</td><td>88</td><td style='color:var(--green)'>70.0%</td><td style='color:var(--amber)'>FXI (中国资产)</td><td>SYNCED</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:var(--green)'>66.7%</td><td style='color:var(--amber)'>TSLA / NVDA</td><td>SYNCED</td></tr><tr><td>C1_burst_silence</td><td>177</td><td style='color:var(--green)'>65.0%</td><td style='color:var(--amber)'>SPY (大盘)</td><td>SYNCED</td></tr><tr><td>B1_triple_signal</td><td>17</td><td style='color:var(--green)'>64.7%</td><td style='color:var(--amber)'>GLD (黄金)</td><td>SYNCED</td></tr><tr><td>B2_tariff_to_deal</td><td>19</td><td style='color:var(--green)'>57.9%</td><td style='color:var(--amber)'>USD/CNY</td><td>SYNCED</td></tr><tr><td>A1_tariff_bearish</td><td>23</td><td style='color:var(--green)'>56.5%</td><td style='color:var(--amber)'>KWEB (中概)</td><td>SYNCED</td></tr><tr><td>A2_deal_bullish</td><td>91</td><td style='color:var(--green)'>51.6%</td><td style='color:var(--amber)'>DJT / MEME</td><td>SYNCED</td></tr><tr><td>C2_brag_top</td><td>60</td><td style='color:var(--green)'>45.0%</td><td style='color:var(--amber)'>VIX (波动率)</td><td>SYNCED</td></tr><tr><td>C3_night_alert</td><td>8</td><td style='color:var(--green)'>37.5%</td><td style='color:var(--amber)'>CASH</td><td>SYNCED</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div>
-                <div class="section-title">实时推文情绪与机会发现</div>
-                <div class="opp-box">
-                    <div class="label highlight">今日最新推文分析:</div>
-                    <p style="font-size:12px; margin: 10px 0;">"No active feed."</p>
-                    <hr style="border:0; border-top:1px solid #333;">
-                    <div class="label highlight">核心机会点发现 (OPPORTUNITIES):</div>
-                    <div style="font-size:13px; margin-top:10px;">等待关键词触发 (Tariff, Tax, China...)</div>
+                <div class="panel report-box">
+                    <div class="label" style="color:var(--amber); margin-bottom:10px;">实时情报日报 (Daily Report)</div>
+                    <div style="font-size: 11px; margin-bottom: 10px;">[EN] Achieve Life Sciences Inc expected to post a loss of 27 cents a share - Earnings Preview</div>
+                    <div style="font-size: 12px; color: white;">[CN] 识别到潜在宏观变动，正在评估对冲仓位...</div>
                 </div>
                 
-                <div class="metric-card" style="margin-top:20px;">
-                    <div class="label">风险控制: 最大回撤 (MDD)</div>
-                    <div class="value" style="color:#f85149;">-13.35%</div>
-                    <div style="font-size:10px; color:#444; margin-top:5px;">当前建议总仓位: 68.4% (Kelly)</div>
+                <div class="panel" style="margin-top:20px;">
+                    <div class="label" style="color:var(--green)">机会转化指令 (Actionable Alpha)</div>
+                    <table>
+                        <thead><tr><th>标的</th><th>信号</th><th>建议仓位</th></tr></thead>
+                        <tbody>
+                            <tr><td><b>IWM</b></td><td><span class='signal-tag'>LONG</span></td><td>25%</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top:15px; font-size:10px; color:#444;">
+                        >> 情绪流分析：中立偏多<br>
+                        >> 波动率风控：符合限制<br>
+                        >> 自动映射：已同步 $IWM/$FXI 对冲头寸
+                    </div>
                 </div>
             </div>
         </div>
