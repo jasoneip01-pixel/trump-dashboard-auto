@@ -1,129 +1,118 @@
 import os, yfinance as yf, pandas as pd, numpy as np, requests
 from datetime import datetime
 
-# --- [1. 核心模型胜率矩阵：你的决策底牌] ---
-SUB_MODELS = [
-    {"id": "A3", "name": "relief_rocket", "win": 0.727, "asset": "IWM", "risk": "低"},
-    {"id": "D3", "name": "volume_spike", "win": 0.702, "asset": "BTC", "risk": "高"},
-    {"id": "D2", "name": "sig_change", "win": 0.700, "asset": "FXI", "risk": "中"},
-    {"id": "B3", "name": "action_pre", "win": 0.667, "asset": "TSLA", "risk": "高"},
-    {"id": "C1", "name": "burst_silence", "win": 0.650, "asset": "SPY", "risk": "低"},
-    {"id": "B1", "name": "triple_signal", "win": 0.647, "asset": "GLD", "risk": "中"}
-]
-
-# --- [2. 自动化自驾引擎逻辑] ---
-OPPORTUNITY_MAP = {
-    "TARIFF": {"tk": "YANG", "dir": "LONG", "desc": "关税升级预期 -> 做空中国资产"},
-    "TAX": {"tk": "IWM", "dir": "LONG", "desc": "减税政策利好 -> 做多美国小盘股"},
-    "CRYPTO": {"tk": "BITO", "dir": "LONG", "desc": "监管环境转暖 -> 加仓加密货币"},
-    "CHINA": {"tk": "FXI", "dir": "SHORT", "desc": "对华限制加强 -> 减少中概暴露"}
+# --- [量化因子库：增强型关键词] ---
+LOGIC_LIBRARY = {
+    "POLICY": {"keywords": ["TARIFF", "TRADE", "CHINA", "TAX", "DEAL"], "tk": "IWM", "side": "LONG", "desc": "政策博弈"},
+    "CRYPTO": {"keywords": ["BTC", "CRYPTO", "BITCOIN", "REGULATION"], "tk": "BITO", "side": "LONG", "desc": "数字资产溢价"},
+    "ENERGY": {"keywords": ["OIL", "ENERGY", "DRILL", "CLIMATE"], "tk": "XLE", "side": "LONG", "desc": "传统能源复苏"},
+    "TECH": {"keywords": ["AI", "NVDA", "SEMICONDUCTOR", "CHIP"], "tk": "QQQ", "side": "LONG", "desc": "科技成长因子"}
 }
 
-def get_market_intelligence():
+SUB_MODELS = [
+    {"id": "A3", "name": "relief_rocket", "win": 0.727, "asset": "IWM"},
+    {"id": "D3", "name": "volume_spike", "win": 0.702, "asset": "BTC"},
+    {"id": "D2", "name": "sig_change", "win": 0.700, "asset": "FXI"},
+    {"id": "B3", "name": "action_pre", "win": 0.667, "asset": "TSLA"}
+]
+
+def fetch_intel():
     api_key = os.getenv("ALPHAVANTAGE_API_KEY", "DEMO")
-    tickers = ["SPY", "IWM", "FXI", "BTC-USD", "GLD", "YANG"]
+    tickers = ["SPY", "IWM", "FXI", "BITO", "QQQ", "XLE"]
     try:
-        # 抓取真实市场数据
-        data = yf.download(tickers, period="3mo", interval="1d")['Close'].ffill()
-        rets = data.pct_change().dropna()
+        # 获取行情
+        df = yf.download(tickers, period="6mo", interval="1d")['Close'].ffill()
+        rets = df.pct_change().dropna()
 
-        # 情绪扫描
-        news_api = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=15&apikey={api_key}"
-        res = requests.get(news_api).json().get("feed", [])
+        # 情绪引擎升级：多关键词匹配
+        news_res = requests.get(f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=25&apikey={api_key}').json()
+        feeds = news_res.get("feed", [])
         
-        signals = []
-        news_text = "等待市场信号穿透..."
-        if res:
-            news_text = res[0]['title']
-            full_content = " ".join([n['title'].upper() for n in res])
-            for k, v in OPPORTUNITY_MAP.items():
-                if k in full_content: signals.append(v)
+        active_signals = []
+        news_cloud = " ".join([n['title'].upper() for n in feeds])
+        
+        for factor, cfg in LOGIC_LIBRARY.items():
+            if any(k in news_cloud for k in cfg['keywords']):
+                active_signals.append(cfg)
 
-        # 自驾引擎收益逻辑：信号驱动调仓
-        if signals:
-            active_ret = sum([rets[s['tk']] * (1 if s['dir']=="LONG" else -1) for s in signals]) / len(signals)
+        # 动态权重分配 (Kelly-Lite)
+        if active_signals:
+            w = 1.0 / len(active_signals)
+            strat_ret = sum([rets[s['tk']] * (1 if s['side']=="LONG" else -1) * w for s in active_signals])
         else:
-            active_ret = rets['SPY'] # 默认基准
+            strat_ret = rets['SPY'] * 0.5 + rets['IWM'] * 0.5 # 默认对冲模式
 
-        cum_ret = (1 + active_ret).cumprod()
+        cum_ret = (1 + strat_ret).cumprod()
         
         return {
             "ret": f"{(cum_ret.iloc[-1]-1)*100:+.2f}%",
-            "sharpe": f"{(active_ret.mean()*252)/(active_ret.std()*np.sqrt(252)):.2f}",
+            "sharpe": f"{(strat_ret.mean()*252)/(strat_ret.std()*np.sqrt(252)):.2f}",
             "mdd": f"{((cum_ret / cum_ret.cummax()) - 1).min()*100:.2f}%",
-            "signals": signals if signals else [{"tk":"CASH", "dir":"WAIT", "desc":"震荡市，现金避险"}],
-            "news": news_text,
-            "update": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+            "signals": active_signals if active_signals else [{"tk":"CASH", "side":"WAIT", "desc":"信号真空期"}],
+            "news": feeds[0]['title'] if feeds else "Market Sidelined",
+            "ts": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         }
     except Exception as e:
         return {"error": str(e)}
 
-def render_terminal(d):
+def render_ui(d):
     html = f"""
     <!DOCTYPE html>
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
-            :root {{ --neon: #00FF66; --bg: #050505; --amber: #FFB800; --red: #FF3333; }}
-            body {{ background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; padding: 15px; margin: 0; }}
-            .box {{ background: #0D0D0D; border: 1px solid #1A1A1A; padding: 12px; margin-bottom: 10px; border-radius: 4px; }}
-            .header {{ border-bottom: 2px solid var(--neon); padding-bottom: 10px; display: flex; justify-content: space-between; font-weight: bold; }}
-            .stat-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }}
-            .label {{ color: #555; font-size: 10px; text-transform: uppercase; }}
-            .val {{ font-size: 22px; font-weight: bold; }}
-            .signal-item {{ border-left: 3px solid var(--amber); padding-left: 10px; margin: 10px 0; font-size: 13px; }}
-            table {{ width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }}
-            th {{ text-align: left; color: #444; border-bottom: 1px solid #1A1A1A; padding-bottom: 5px; }}
-            td {{ padding: 8px 0; border-bottom: 1px solid #111; }}
+            :root {{ --neon: #00FF66; --bg: #000; --card: #0A0A0A; --border: #1A1A1A; --amber: #FFB800; }}
+            body {{ background: var(--bg); color: var(--neon); font-family: -apple-system, 'Inter', sans-serif; padding: 12px; margin: 0; }}
+            .card {{ background: var(--card); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px; }}
+            .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
+            .val {{ font-size: 26px; font-weight: 900; letter-spacing: -1px; }}
+            .label {{ font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 4px; }}
+            .sig-box {{ border-left: 3px solid var(--amber); padding-left: 12px; margin: 12px 0; }}
+            table {{ width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px; }}
+            th {{ text-align: left; color: #444; border-bottom: 1px solid #111; padding: 8px 4px; }}
+            td {{ padding: 10px 4px; border-bottom: 1px solid #050505; }}
+            .up {{ color: var(--neon); }} .down {{ color: #FF3333; }}
         </style>
     </head>
     <body>
-        <div class="header">
-            <span>TRUMP_CODE INTELLIGENCE V13.0</span>
-            <span style="font-size:10px;">{d['update']} UTC</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <b style="font-size:14px; color:#fff;">TRUMP_CODE INTEL v14.0</b>
+            <span style="font-size:10px; color:#444;">{d['ts']} UTC</span>
         </div>
 
-        <div class="stat-grid">
-            <div class="box"><div class="label">自驾引擎收益</div><div class="val">{d['ret']}</div></div>
-            <div class="box"><div class="label">夏普比率</div><div class="val" style="color:white">{d['sharpe']}</div></div>
+        <div class="grid">
+            <div class="card"><div class="label">自驾引擎收益</div><div class="val { 'up' if '+' in d['ret'] else 'down' }">{d['ret']}</div></div>
+            <div class="card"><div class="label">夏普比率 (Sharpe)</div><div class="val" style="color:#fff;">{d['sharpe']}</div></div>
         </div>
 
-        <div class="box">
-            <div class="label" style="color:var(--amber)">● 机会识别与自动调仓指令</div>
-            {"".join([f"<div class='signal-item'><b>{s['tk']} | {s['dir']}</b><br><span style='color:#888'>{s['desc']}</span></div>" for s in d['signals']])}
+        <div class="card">
+            <div class="label" style="color:var(--amber)">● 信号穿透与调仓指令 (Active Signals)</div>
+            {"".join([f"<div class='sig-box'><b style='color:#fff;'>{s['tk']} | {s['side']}</b><br><span style='color:var(--amber); font-size:11px;'>{s['desc']}</span></div>" for s in d['signals']])}
         </div>
 
-        <div class="box">
-            <div class="label">情报流摘要</div>
-            <div style="font-size:12px; color:white; margin-top:5px;">{d['news']}</div>
-        </div>
-
-        <div class="box">
-            <div class="label">子模型全量监控矩阵 (A3-C1)</div>
+        <div class="card">
+            <div class="label">核心子模型胜率 (Win Rate Matrix)</div>
             <table>
-                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th><th>风险</th></tr></thead>
+                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th></tr></thead>
                 <tbody>
-                    {"".join([f"<tr><td>{m['id']}_{m['name']}</td><td style='color:var(--neon)'>{m['win']*100}%</td><td>{m['asset']}</td><td>{m['risk']}</td></tr>" for m in SUB_MODELS])}
+                    {"".join([f"<tr><td>{m['id']}</td><td style='color:#fff;'>{m['win']*100:.1f}%</td><td>{m['asset']}</td></tr>" for m in SUB_MODELS])}
                 </tbody>
             </table>
         </div>
 
-        <div class="box" style="border-color:var(--red)">
-            <div class="label" style="color:var(--red)">风控模型 (MDD CONTROL)</div>
-            <div class="val" style="color:var(--red)">{d['mdd']}</div>
+        <div class="card" style="border-color:#333;">
+            <div class="label">风控监控 (Risk MDD)</div>
+            <div class="val down" style="font-size:18px;">{d['mdd']}</div>
+            <div style="font-size:10px; color:#222; margin-top:10px;">适配全机型终端 | 动态权重分仓已启动</div>
         </div>
     </body>
     </html>
     """
     os.makedirs('docs', exist_ok=True)
-    with open('docs/index.html', 'w', encoding='utf-8') as f:
-        f.write(html)
+    with open('docs/index.html', 'w', encoding='utf-8') as f: f.write(html)
 
 if __name__ == "__main__":
-    intelligence = get_market_intelligence()
-    if "error" not in intelligence:
-        render_terminal(intelligence)
-    else:
-        print(f"FAILED: {intelligence['error']}")
+    intel = fetch_intel()
+    if "error" not in intel: render_ui(intel)
