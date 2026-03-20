@@ -4,78 +4,61 @@
     <head>
         <meta charset="UTF-8">
         <style>
-            :root { --neon-green: #00ff66; --deep-bg: #010409; --card-bg: #0d1117; --border: #30363d; --gold: #d29922; }
-            body { background: var(--deep-bg); color: #adbac7; font-family: 'SF Mono', 'Courier New', monospace; padding: 20px; }
-            .terminal { border: 1px solid var(--neon-green); padding: 25px; border-radius: 8px; box-shadow: 0 0 20px rgba(0,255,102,0.1); }
-            .header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--neon-green); padding-bottom: 15px; margin-bottom: 25px; }
-            .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-            .card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; }
-            .label { font-size: 10px; color: #768390; text-transform: uppercase; letter-spacing: 1px; }
-            .value { font-size: 24px; font-weight: bold; color: var(--neon-green); margin-top: 5px; }
+            body { background: #010409; color: #adbac7; font-family: monospace; padding: 20px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #238636; padding-bottom: 10px; }
+            .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+            .metric-card { background: #0d1117; border: 1px solid #30363d; padding: 15px; border-radius: 4px; }
+            .label { font-size: 11px; color: #768390; }
+            .value { font-size: 24px; font-weight: bold; color: #3fb950; }
             
-            .main-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-            table { width: 100%; border-collapse: collapse; font-size: 12px; }
-            th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); color: #768390; }
-            td { padding: 10px; border-bottom: 1px solid #222; }
-            .win-cell { color: var(--neon-green); font-weight: bold; }
+            .content-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+            .section-title { font-size: 14px; color: #d29922; margin-bottom: 15px; border-left: 3px solid #d29922; padding-left: 10px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th, td { text-align: left; padding: 8px; border-bottom: 1px solid #222; }
             
-            .engine-box { background: #000; border: 1px solid var(--gold); padding: 20px; border-radius: 4px; }
-            .log-line { font-size: 11px; color: #58a6ff; margin-bottom: 5px; }
-            .blink { animation: blinker 1.5s linear infinite; }
-            @keyframes blinker { 50% { opacity: 0; } }
+            .opp-box { background: #161b22; border: 1px solid #d29922; padding: 15px; color: #adbac7; line-height: 1.8; }
+            .highlight { color: #58a6ff; }
         </style>
     </head>
     <body>
-        <div class="terminal">
-            <div class="header">
-                <div>
-                    <h1 style="margin:0; font-size:22px; color:var(--neon-green);">TRUMP/CODE <span class="blink">●</span> <span style="font-weight:100;">AUTO-PILOT ENGINE V7.0</span></h1>
-                    <div style="font-size:11px; color:var(--gold); margin-top:5px;">无人值守实战系统 | 11个子策略实时监控中</div>
-                </div>
-                <div style="text-align:right;">
-                    <span style="background:var(--neon-green); color:#000; padding:2px 8px; font-size:10px; font-weight:bold;">LIVE: ACTIVE</span>
-                    <div style="font-size:10px; color:#444; margin-top:5px;">2026-03-20 13:44:37 UTC</div>
-                </div>
+        <div class="header">
+            <div style="font-size: 20px;">TRUMP/CODE <span style="font-weight:100;">Intelligence Terminal V8.0</span></div>
+            <div style="font-size:12px; color:#444;">LAST_SYNC: 2026-03-20 13:49:05 UTC</div>
+        </div>
+
+        <div class="metric-grid">
+            <div class="metric-card"><div class="label">累计收益率 (STRATEGY)</div><div class="value">-8.29%</div></div>
+            <div class="metric-card"><div class="label">基准胜率 (HISTORICAL)</div><div class="value">61.1%</div></div>
+            <div class="metric-card"><div class="label">Z-SCORE (统计显著性)</div><div class="value">+5.30</div></div>
+            <div class="metric-card"><div class="label">夏普比率 (SHARPE)</div><div class="value">-1.12</div></div>
+        </div>
+
+        <div class="content-grid">
+            <div>
+                <div class="section-title">子模型胜率与机会监控</div>
+                <table>
+                    <thead><tr><th>模型</th><th>样本N</th><th>胜率</th><th>机会点映射</th></tr></thead>
+                    <tbody>
+                        <tr><td>A3_relief_rocket</td><td>11</td><td style='color:#3fb950'>72.7%</td><td style='color:#8b949e'>政策底部反弹，做多 IWM</td></tr><tr><td>D3_volume_spike</td><td>47</td><td style='color:#3fb950'>70.2%</td><td style='color:#8b949e'>放量突破，追随 BTC 动能</td></tr><tr><td>D2_sig_change</td><td>88</td><td style='color:#3fb950'>70.0%</td><td style='color:#8b949e'>趋势反转，做空 FXI (对冲)</td></tr><tr><td>B3_action_pre</td><td>33</td><td style='color:#3fb950'>66.7%</td><td style='color:#8b949e'>事件前瞻，布局 TSLA 波动</td></tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="grid">
-                <div class="card"><div class="label">自驾引擎总仓位 (EXPOSURE)</div><div class="value">68.4%</div></div>
-                <div class="card"><div class="label">情绪偏离 (SENTIMENT)</div><div class="value" style="color:var(--gold)">0.12</div></div>
-                <div class="card"><div class="label">夏普比率 (SHARPE)</div><div class="value">-4.53</div></div>
-                <div class="card"><div class="label">最大回撤 (MAX DD)</div><div class="value" style="color:#f85149;">-5.38%</div></div>
-            </div>
-
-            <div class="main-layout">
-                <div class="card">
-                    <div class="label" style="margin-bottom:15px; color:var(--neon-green);">★ 策略矩阵 (Backtest Strategy Rankings)</div>
-                    <table>
-                        <thead><tr><th>模型 ID</th><th>样本 N</th><th>胜率 (CE)</th><th>95% CI 区间</th><th>状态</th></tr></thead>
-                        <tbody>
-                            <tr><td><b>A3_relief_rocket</b></td><td>11</td><td class='win-cell'>72.7%</td><td style='color:#444'>43%-90%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>D3_volume_spike</b></td><td>47</td><td class='win-cell'>70.2%</td><td style='color:#444'>55%-81%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>D2_sig_change</b></td><td>88</td><td class='win-cell'>70.0%</td><td style='color:#444'>59%-79%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>B3_action_pre</b></td><td>33</td><td class='win-cell'>66.7%</td><td style='color:#444'>50%-80%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>C1_burst_silence</b></td><td>177</td><td class='win-cell'>65.0%</td><td style='color:#444'>58%-72%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>B1_triple_signal</b></td><td>17</td><td class='win-cell'>64.7%</td><td style='color:#444'>41%-83%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>B2_tariff_to_deal</b></td><td>19</td><td class='win-cell'>57.9%</td><td style='color:#444'>36%-77%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>A1_tariff_bearish</b></td><td>23</td><td class='win-cell'>56.5%</td><td style='color:#444'>37%-75%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>A2_deal_bullish</b></td><td>91</td><td class='win-cell'>51.6%</td><td style='color:#444'>42%-62%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>C2_brag_top</b></td><td>60</td><td class='win-cell'>45.0%</td><td style='color:#444'>33%-58%</td><td><span style='color:#238636'>SYNCED</span></td></tr><tr><td><b>C3_night_alert</b></td><td>8</td><td class='win-cell'>37.5%</td><td style='color:#444'>14%-69%</td><td><span style='color:#238636'>SYNCED</span></td></tr>
-                        </tbody>
-                    </table>
+            <div>
+                <div class="section-title">实时推文情绪与机会发现</div>
+                <div class="opp-box">
+                    <div class="label highlight">今日最新推文分析:</div>
+                    <p style="font-size:12px; margin: 10px 0;">"No active feed."</p>
+                    <hr style="border:0; border-top:1px solid #333;">
+                    <div class="label highlight">核心机会点发现 (OPPORTUNITIES):</div>
+                    <div style="font-size:13px; margin-top:10px;">等待关键词触发 (Tariff, Tax, China...)</div>
                 </div>
-
-                <div class="engine-box">
-                    <div class="label" style="color:var(--gold); margin-bottom:15px;">实时日报 (DAILY REPORT)</div>
-                    <div class="log-line">>> [NLP] 抓取情绪流: 0.12</div>
-                    <div class="log-line">>> [TRANS] 最新推文/新闻穿透:</div>
-                    <p style="font-size:12px; font-style:italic; border-left:2px solid var(--gold); padding-left:10px; color:#c9d1d9;">"No fresh signals detected in the last hour."</p>
-                    <div class="log-line" style="margin-top:20px;">>> [ACTION] 自动仓位决策:</div>
-                    <div style="font-size:14px; font-weight:bold; color:var(--neon-green); margin-top:5px;">
-                        LONG IWM / SHORT FXI
-                    </div>
-                    <div style="margin-top:30px; font-size:10px; color:#333;">
-                        Z-SCORE: +5.30 (CONFIRMED)<br>
-                        ALPHA VS SPY: +4.21%<br>
-                        KELLY CRITERION: EXECUTED
-                    </div>
+                
+                <div class="metric-card" style="margin-top:20px;">
+                    <div class="label">风险控制: 最大回撤 (MDD)</div>
+                    <div class="value" style="color:#f85149;">-13.35%</div>
+                    <div style="font-size:10px; color:#444; margin-top:5px;">当前建议总仓位: 68.4% (Kelly)</div>
                 </div>
-            </div>
-
-            <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:10px; font-size:10px; color:#444; display:flex; justify-content:space-between;">
-                <div>数据源: ALPHAVANTAGE (SENTIMENT) / YAHOO FINANCE (QUANT)</div>
-                <div>GITHUB ACTIONS 无人值守自驾模式已开启</div>
             </div>
         </div>
     </body>
