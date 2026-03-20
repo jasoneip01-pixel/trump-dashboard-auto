@@ -12,28 +12,22 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Run Analysis Script
+      - name: Run logic
         run: python fetch_and_build_dashboard.py
 
-      - name: Commit and Push Changes
+      - name: Commit and Push
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add trump_dashboard.html data/
-          # 只有在有变化时才提交，防止报错
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
           if ! git diff --cached --quiet; then
-            git commit -m "🤖 自动更新看板指标: $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "🚀 强制刷新指标及路径: $(date)"
             git push
-          else
-            echo "No changes to commit"
           fi
