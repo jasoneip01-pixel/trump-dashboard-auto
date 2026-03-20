@@ -1,28 +1,36 @@
 name: Daily Dashboard Update
+
 on:
   schedule:
-    - cron: '0 2 * * *'  # 每天北京时间 10:00 自动更新
-  workflow_dispatch:      # 支持手动触发按钮
+    - cron: '0 0 * * *' # 每天 UTC 0 点运行
+  workflow_dispatch: # 允许手动点击运行
 
 jobs:
-  run-analysis:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: os-actions/setup-python@v4
         with:
-          python-version: '3.11'
-      - name: Install Libs
-        run: pip install yfinance pandas numpy
-      - name: Build
-        run: python build_dashboard.py
-      - name: Commit & Push
+          python-version: '3.9'
+
+      - name: Install dependencies
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/index.html
-          git commit -m "🤖 自动行情数据更新" || echo "No changes"
-          git push origin main
+          python -m pip install --upgrade pip
+          pip install yfinance pandas numpy requests
+
+      - name: Run script
+        env:
+          ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+        run: python build_dashboard.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-update terminal data" || exit 0
+          git push
