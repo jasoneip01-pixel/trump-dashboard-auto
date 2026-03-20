@@ -1,5 +1,5 @@
 
-        <!DOCTYPE html><html><head><meta charset="UTF-8">
+        <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Trump Code Monitor</title>
         <style>
             body { background:#080c10; color:#c8daea; font-family:sans-serif; margin:0; padding:20px; font-size:13px; }
             .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#1e2d3d; border:1px solid #1e2d3d; margin-bottom:20px; }
@@ -8,27 +8,101 @@
             .lab { color:#8aa4b8; font-size:11px; text-transform:uppercase; }
             table { width:100%; border-collapse:collapse; background:#0d1318; }
             td, th { padding:12px; border-bottom:1px solid #1e2d3d; text-align:left; }
-            th { color:#4a6178; font-size:10px; }
+            th { color:#4a6178; font-size:10px; text-transform:uppercase; }
+            .report { background:#111820; padding:20px; border:1px solid #1e2d3d; border-radius:4px; margin-top:20px; line-height:1.6; }
         </style></head><body>
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <span style="color:#00e5a0; font-weight:bold;">TRUMP/CODE PROFESSIONAL MONITOR</span>
-            <span style="color:#4a6178;">LAST SYNC: 2026-03-20 07:21:58 UTC</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div style="color:#00e5a0; font-weight:bold; font-size:16px;">TRUMP/CODE PROFESSIONAL MONITOR</div>
+            <div style="color:#4a6178; font-size:11px;">UTC: 2026-03-20 07:25:19 | TOTAL_TRADES: 566</div>
         </div>
         <div class="grid">
             <div class="kpi"><div class="lab">真实胜率</div><div class="val">11.3%</div></div>
-            <div class="kpi"><div class="lab">显著性 Z-SCORE</div><div class="val">-18.41</div></div>
+            <div class="kpi"><div class="lab">显著性 Z-SCORE</div><div class="val" style="color:#ff4d6a">-18.41</div></div>
             <div class="kpi"><div class="lab">模拟累计收益</div><div class="val" style="color:#ff4d6a;">-70.91%</div></div>
             <div class="kpi"><div class="lab">SHARPE 年化</div><div class="val" style="color:#3d9eff;">-22.19</div></div>
         </div>
-        <table>
-            <tr><th>模型 ID</th><th>样本数</th><th>胜率</th><th style="text-align:right">平均单笔回报</th></tr>
-            
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+            <div>
+                <div class="lab" style="margin-bottom:10px;">模型排行 (基于真实数据回测)</div>
+                <table><tr><th>模型 ID</th><th>样本</th><th>胜率</th><th style="text-align:right">平均回报</th></tr>
             <tr>
-                <td style="color:#8aa4b8;">Unknown</td>
-                <td>566</td>
-                <td style="color:#ff4d6a; font-weight:bold;">11.3%</td>
-                <td style="text-align:right; color:#ff4d6a;">-0.218%</td>
+                <td style="color:#8aa4b8; font-family:monospace;">B1_triple_signal</td>
+                <td>17</td>
+                <td style="color:#00e5a0; font-weight:bold;">100.0%</td>
+                <td style="text-align:right; color:#00e5a0;">+0.136%</td>
             </tr>
-        </table>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">D3_volume_spike</td>
+                <td>47</td>
+                <td style="color:#00e5a0; font-weight:bold;">100.0%</td>
+                <td style="text-align:right; color:#00e5a0;">+0.136%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">C1_burst_silence</td>
+                <td>177</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.330%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">B2_tariff_to_deal</td>
+                <td>19</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.140%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">A2_deal_bullish</td>
+                <td>91</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.330%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">B3_action_pre</td>
+                <td>33</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.330%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">D2_sig_change</td>
+                <td>80</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.140%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">A1_tariff_bearish</td>
+                <td>23</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.330%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">A3_relief_rocket</td>
+                <td>11</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">+0.000%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">C2_brag_top</td>
+                <td>60</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.140%</td>
+            </tr>
+            <tr>
+                <td style="color:#8aa4b8; font-family:monospace;">C3_night_alert</td>
+                <td>8</td>
+                <td style="color:#ff4d6a; font-weight:bold;">0.0%</td>
+                <td style="text-align:right; color:#ff4d6a;">-0.330%</td>
+            </tr></table>
+            </div>
+            <div>
+                <div class="lab" style="margin-bottom:10px;">今日深度摘要</div>
+                <div class="report">
+                    <b style="color:#3d9eff;">中文研判:</b><br>川普密碼每日報告 -- 2026-03-19
+今日推文: 15 篇 | 觸發模型: 0 組
+偵測信號: Deal, 中國, 伊朗, 只有Deal沒有關稅
+共識方向: 0 組看多 vs 0 組看空
+歷史命中率: 0.0% (0/0)
+最新推文: Passing The Save America Act Is Indispensable To Preserve Representative Democracy: https://paulingr
+                </div>
+            </div>
+        </div>
         </body></html>
         
