@@ -1,32 +1,49 @@
 
     <!DOCTYPE html>
-    <html lang="zh-CN">
+    <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>TRUMP/CODE 实时量化看板</title>
         <style>
-            body { background: #050505; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding: 40px; }
-            .container { width: 100%; max-width: 800px; }
-            .header { border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
-            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-            .card { background: #111; padding: 25px; border-radius: 12px; border: 1px solid #222; text-align: center; }
-            .label { color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 10px; }
-            .value { font-size: 32px; font-weight: bold; color: #52c41a; }
-            .time { color: #444; font-size: 12px; margin-top: 20px; text-align: right; }
+            body { background: #000; color: #00ff00; font-family: 'Courier New', monospace; padding: 20px; line-height: 1.2; }
+            .border { border: 1px solid #00ff00; padding: 20px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #00ff00; padding-bottom: 10px; }
+            .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
+            .stat-box { border: 1px solid #333; padding: 15px; }
+            .label { color: #888; font-size: 12px; }
+            .val { font-size: 24px; font-weight: bold; margin-top: 5px; }
+            .signal { font-size: 40px; background: #00ff00; color: #000; padding: 10px; text-align: center; margin-top: 20px; }
+            .warn { background: #ff0000; color: #fff; }
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="border">
             <div class="header">
-                <h1 style="margin:0;">TRUMP/CODE <span style="font-weight:100; color:#888;">Live</span></h1>
+                <div>[ TRUMP_STRATEGY_MONITOR_V4 ]</div>
+                <div>SYSTEM_TIME: 13:17:05 UTC</div>
             </div>
+
+            <div class="signal warn">
+                CURRENT_ACTION: DE-LEVERAGE
+            </div>
+
             <div class="grid">
-                <div class="card"><div class="label">DJT 30日累计收益</div><div class="value">+nan%</div></div>
-                <div class="card"><div class="label">BTC 相关性</div><div class="value" style="color:#fadb14;">0.53</div></div>
-                <div class="card"><div class="label">SPY 相关性</div><div class="value" style="color:#ff4d4f;">0.71</div></div>
+                <div class="stat-box"><div class="label">策略组合累计收益率</div><div class="val">-36.57%</div></div>
+                <div class="stat-box"><div class="label">夏普比率 (年化)</div><div class="val">-0.57</div></div>
+                <div class="stat-box"><div class="label">最大回撤 (Risk Limit)</div><div class="val" style="color:red">-51.66%</div></div>
+                <div class="stat-box"><div class="label">实时年化波动率</div><div class="val">40.20%</div></div>
             </div>
-            <p class="time">数据由 Yahoo Finance 实时驱动 | 最后同步: 2026-03-20 13:06:52 UTC</p>
+
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="stat-box"><div class="label">DJT/BTC 相关性</div><div class="val">0.37</div></div>
+                <div class="stat-box"><div class="label">DJT/黄金相关性</div><div class="val">0.08</div></div>
+                <div class="stat-box"><div class="label">回测综合胜率</div><div class="val">61.1%</div></div>
+            </div>
+
+            <div style="margin-top:20px; font-size:12px; color:#444;">
+                >> 所有子模型 (A3, D3, B3, C1) 实时回溯中...<br>
+                >> 纸笔交易(Paper Trading)模式已开启...<br>
+                >> 自动化部署状态: 正常
+            </div>
         </div>
     </body>
     </html>
