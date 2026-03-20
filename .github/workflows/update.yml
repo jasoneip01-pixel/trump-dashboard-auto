@@ -23,7 +23,10 @@ jobs:
         run: pip install requests yfinance pandas numpy scipy --quiet
 
       - name: Run Quantitative Analysis
-        run: python fix_dashboard.py
+        run: |
+          # 确保数据目录存在（防止脚本崩溃）
+          mkdir -p paper_results
+          python fix_dashboard.py
 
       - name: Smart Deploy
         run: |
@@ -31,8 +34,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           mkdir -p docs
           cp trump_dashboard.html docs/index.html
-          rm -f "#" "docs/index.html.bak" "修改修改时间"
           git add docs/index.html
+          # 只有在有变化时才推送，避免死循环
           if git diff --staged --quiet; then
             echo "No changes"
           else
