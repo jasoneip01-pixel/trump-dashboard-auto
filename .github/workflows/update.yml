@@ -1,10 +1,8 @@
 name: Daily Dashboard Update
-
 on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
-
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -12,37 +10,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install Dependencies
-        run: pip install requests yfinance pandas numpy scipy --quiet
-
-      - name: Run Quantitative Analysis
-        run: |
-          mkdir -p paper_results
-          python fix_dashboard.py
-
-      - name: Smart Deploy
+      - name: Build Dashboard
+        run: python build_dashboard.py
+      - name: Deploy
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 关键修复：先将所有生成的变动暂存
-          mkdir -p docs
-          cp trump_dashboard.html docs/index.html
-          git add docs/index.html paper_results/*.json 2>/dev/null || true
-          
-          # 检查是否有东西需要提交
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "🚀 自动更新: 指标同步 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            # 使用更稳健的推送方式
-            git pull origin main --rebase
-            git push origin main
-          fi
+          git add docs/index.html
+          git commit -m "🚀 网页端直接修复：切换至纯生成模式" || echo "No changes"
+          git push origin main
