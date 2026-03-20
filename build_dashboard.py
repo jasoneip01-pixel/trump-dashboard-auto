@@ -1,116 +1,130 @@
 import os, yfinance as yf, pandas as pd, numpy as np, requests
 from datetime import datetime
 
-class RealTimeQuant:
+class InstitutionalDecisionSupport:
     def __init__(self):
         self.api_key = os.getenv("ALPHAVANTAGE_API_KEY", "DEMO")
-        # 资产池：标的 - 核心关联分类
-        self.assets = {
-            "IWM": {"name": "罗素2000", "category": "TRADE", "impact": ["TARIFF", "TAX", "USA"]},
-            "BITO": {"name": "比特币ETF", "category": "CRYPTO", "impact": ["BTC", "CRYPTO", "SEC"]},
-            "QQQ": {"name": "纳指100", "category": "TECH", "impact": ["AI", "CHIPS", "FED"]},
-            "FXI": {"name": "中国大盘ETF", "category": "GLOBAL", "impact": ["CHINA", "TRADE", "TARIFF"]}
+        # 核心映射：政策触发词 -> 影响资产
+        self.policy_matrix = {
+            "TARIFF": {"pos": ["UUP"], "neg": ["FXI", "IWM"], "desc": "贸易保护加剧，美元走强，出海企业受损"},
+            "TAX_CUT": {"pos": ["IWM", "SPY"], "neg": [], "desc": "内需企业利好，推升本土中小市值表现"},
+            "CRYPTO": {"pos": ["BITO"], "neg": [], "desc": "监管环境放松预期，数字资产动量增强"},
+            "ENERGY": {"pos": ["XLE"], "neg": [], "desc": "传统能源审批加速，利好化石能源"}
         }
-        self.tickers = list(self.assets.keys()) + ["SPY", "^VIX"]
+        self.tickers = ["IWM", "BITO", "QQQ", "FXI", "UUP", "^VIX", "SPY"]
 
-    def get_intel_analysis(self):
-        """核心：推文/情报分类与情绪定量"""
-        intel_stack = []
+    def fetch_deep_intel(self):
+        """抓取并进行政策语义识别"""
+        intel_reports = []
         try:
-            r = requests.get(f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=20&apikey={self.api_key}").json()
-            feeds = r.get("feed", [])
-            for f in feeds:
-                title = f.get("title", "").upper()
-                score = float(f.get("overall_sentiment_score", 0))
+            # 增加 limit 到 50，获取更广的情报池
+            url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&limit=50&apikey={self.api_key}"
+            data = requests.get(url, timeout=10).json().get("feed", [])
+            
+            for item in data:
+                content = (item.get("title", "") + " " + item.get("summary", "")).upper()
+                sentiment = float(item.get("overall_sentiment_score", 0))
                 
-                # 分类逻辑
-                cat = "GENERAL"
-                if any(k in title for k in ["TARIFF", "TRADE", "IMPORT"]): cat = "TRADE"
-                elif any(k in title for k in ["BTC", "CRYPTO", "BITCOIN"]): cat = "CRYPTO"
-                elif any(k in title for k in ["FED", "RATE", "INFLATION"]): cat = "MACRO"
-                elif any(k in title for k in ["AI", "NVIDIA", "TECH"]): cat = "TECH"
-                
-                intel_stack.append({"title": title, "cat": cat, "score": score})
+                # 寻找关键词匹配
+                for keyword, impact in self.policy_matrix.items():
+                    if keyword in content:
+                        intel_reports.append({
+                            "keyword": keyword,
+                            "sentiment": sentiment,
+                            "impact": impact,
+                            "headline": item.get("title", "")[:60] + "..."
+                        })
         except: pass
-        return intel_stack
+        return intel_reports
 
-    def analyze_opportunities(self):
-        df = yf.download(self.tickers, period="1mo", interval="1d", auto_adjust=True)
+    def run_analysis(self):
+        # 1. 获取行情
+        df = yf.download(self.tickers, period="3mo", interval="1d", auto_adjust=True)
         df = df['Close'] if 'Close' in df else df
         df = df.ffill().bfill()
 
-        intel = self.get_intel_analysis()
-        vix = df['^VIX'].iloc[-1]
+        # 2. 深度情报获取
+        intel = self.fetch_deep_intel()
         
+        # 3. 资产逻辑计算
         results = []
-        for tk, info in self.assets.items():
-            # 1. 提取该资产相关的平均情绪
-            relevant_scores = [i['score'] for i in intel if i['cat'] == info['category'] or any(k in i['title'] for k in info['impact'])]
-            avg_sentiment = np.mean(relevant_scores) if relevant_scores else 0
+        for tk in ["IWM", "BITO", "QQQ", "FXI"]:
+            # 计算技术面：20日趋势 + 波动率
+            recent_ret = (df[tk].iloc[-1] / df[tk].iloc[-20]) - 1
+            vol = df[tk].pct_change().std() * np.sqrt(252)
             
-            # 2. 计算量化指标
-            returns = df[tk].pct_change()
-            mom = returns.tail(5).sum() # 5日动量
-            vol = returns.std() * np.sqrt(252) # 年化波动
-            
-            # 3. 机会点评分 (实打实的逻辑：情绪正向+动量向上+波动可控)
-            opp_score = (avg_sentiment * 0.4) + (mom * 0.4) - (vol * 0.2)
-            
-            # 4. 建议行动
-            action = "STRONG BUY" if opp_score > 0.05 else "HOLD" if opp_score > -0.02 else "AVOID"
-            if vix > 30: action = "HEDGE/CASH" # 恐慌阈值强制修正
+            # 匹配情报分：汇总所有提到该资产相关关键词的情报
+            rel_intel = [i for i in intel if tk in i['impact']['pos'] or tk in i['impact']['neg']]
+            if rel_intel:
+                # 如果在 neg 列表里，情绪分取反
+                adj_sentiment = np.mean([i['sentiment'] * (-1 if tk in i['impact']['neg'] else 1) for i in rel_intel])
+                reason = rel_intel[0]['desc']
+                top_head = rel_intel[0]['headline']
+            else:
+                adj_sentiment = 0
+                reason = "无直接政策驱动"
+                top_head = "跟随大盘波动"
 
+            # 机会得分 = 情绪权重(0.6) + 趋势权重(0.4)
+            opp_score = (adj_sentiment * 60) + (recent_ret * 40)
+            
             results.append({
-                "tk": tk, "name": info['name'], "cat": info['category'],
-                "sentiment": f"{avg_sentiment:+.2f}",
-                "mom": f"{mom*100:+.1f}%",
-                "opp": round(opp_score * 100, 2),
-                "action": action
+                "tk": tk, "score": round(opp_score, 1),
+                "sentiment": "BULL" if adj_sentiment > 0.1 else "BEAR" if adj_sentiment < -0.1 else "NEUTRAL",
+                "trend": f"{recent_ret*100:+.1f}%",
+                "vol": f"{vol*100:.1f}%",
+                "reason": reason, "top_head": top_head
             })
-        
-        return {"results": results, "vix": vix, "top_news": intel[0]['title'] if intel else "N/A"}
+
+        return {
+            "vix": f"{df['^VIX'].iloc[-1]:.1f}",
+            "ts": datetime.utcnow().strftime('%m-%d %H:%M'),
+            "results": results
+        }
 
     def render(self, data):
-        # 简化版表格，突出“机会点”和“行动”
         rows = "".join([f"""
-            <tr>
-                <td><b>{r['tk']}</b><br><small>{r['name']}</small></td>
-                <td><span class="tag">{r['cat']}</span></td>
-                <td style="color:{'#00ff66' if float(r['sentiment'])>0 else '#ff4444'}">{r['sentiment']}</td>
-                <td>{r['mom']}</td>
-                <td style="font-size:18px; font-weight:bold;">{r['opp']}</td>
-                <td><b class="act-{r['action']}">{r['action']}</b></td>
-            </tr>
+            <div class="asset-card">
+                <div class="row-top">
+                    <b style="font-size:18px;">{r['tk']}</b>
+                    <span class="score-tag">机会分: {r['score']}</span>
+                </div>
+                <div class="metrics">
+                    <span>情绪: <b class="{r['sentiment']}">{r['sentiment']}</b></span>
+                    <span>20D动量: <b>{r['trend']}</b></span>
+                    <span>年化波动: <b>{r['vol']}</b></span>
+                </div>
+                <div class="reason"><b>驱动逻辑:</b> {r['reason']}</div>
+                <div class="headline"><b>最关联情报:</b> {r['top_head']}</div>
+            </div>
         """ for r in data['results']])
 
         html = f"""
         <!DOCTYPE html><html><head><meta charset="UTF-8">
         <style>
-            body {{ background: #000; color: #eee; font-family: sans-serif; padding: 20px; }}
-            .card {{ background: #111; padding: 20px; border-radius: 8px; border: 1px solid #222; }}
-            table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
-            th {{ text-align: left; color: #555; font-size: 12px; border-bottom: 2px solid #222; padding: 10px; }}
-            td {{ padding: 15px 10px; border-bottom: 1px solid #1a1a1a; }}
-            .tag {{ background: #222; padding: 2px 6px; border-radius: 4px; font-size: 11px; }}
-            .act-STRONG {{ color: #00ff66; border: 1px solid #00ff66; padding: 2px 5px; }}
-            .act-AVOID {{ color: #ff4444; opacity: 0.6; }}
-            .act-HEDGE {{ background: #ff4444; color: #fff; padding: 2px 5px; }}
+            body {{ background: #000; color: #ddd; font-family: -apple-system, sans-serif; padding: 20px; }}
+            .asset-card {{ background: #0a0a0a; border: 1px solid #1a1a1a; padding: 20px; margin-bottom: 15px; border-radius: 8px; }}
+            .row-top {{ display: flex; justify-content: space-between; margin-bottom: 15px; }}
+            .score-tag {{ background: #1a3a2a; color: #00ff88; padding: 4px 10px; border-radius: 4px; font-weight: bold; }}
+            .metrics {{ display: flex; gap: 20px; font-size: 13px; color: #888; margin-bottom: 12px; }}
+            .BULL {{ color: #00ff88; }} .BEAR {{ color: #ff4444; }} .NEUTRAL {{ color: #888; }}
+            .reason {{ font-size: 13px; color: #bbb; margin-bottom: 8px; border-left: 2px solid #333; padding-left: 10px; }}
+            .headline {{ font-size: 11px; color: #555; }}
+            .vix-bar {{ font-size: 12px; color: #444; margin-bottom: 20px; text-align: right; }}
         </style></head>
         <body>
-            <div class="card">
-                <h2>TRUMP_CODE 实战机会看板</h2>
-                <div style="color:#666; font-size:13px;">实时头条: {data['top_news']}</div>
-                <table>
-                    <thead><tr><th>相关资产</th><th>分析维度</th><th>情绪极性</th><th>5D动量</th><th>机会得分</th><th>实战建议</th></tr></thead>
-                    <tbody>{rows}</tbody>
-                </table>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                <h2 style="margin:0;">TRUMP_CODE 深度机会下钻</h2>
+                <div class="vix-bar">VIX: {data['vix']} | {data['ts']} UTC</div>
             </div>
+            <hr style="border:0; border-top:1px solid #222; margin: 20px 0;">
+            {rows}
         </body></html>
         """
         os.makedirs('docs', exist_ok=True)
         with open('docs/index.html', 'w', encoding='utf-8') as f: f.write(html)
 
 if __name__ == "__main__":
-    bot = RealTimeQuant()
-    res = bot.analyze_opportunities()
-    bot.render(res)
+    engine = InstitutionalDecisionSupport()
+    data = engine.run_analysis()
+    engine.render(data)
