@@ -1,55 +1,35 @@
 
     <!DOCTYPE html>
-    <html lang="zh">
+    <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>TRUMP_CODE MOBILE</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            :root { --neon: #00FF66; --bg: #000; --card: #0A0A0A; --amber: #FFB800; }
-            body { background: var(--bg); color: var(--neon); font-family: -apple-system, sans-serif; margin: 0; padding: 10px; }
-            /* 响应式栅格：手机端1列，电脑端4列 */
-            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
-            .card { background: var(--card); border: 1px solid #1A1A1A; padding: 12px; border-radius: 4px; }
-            .label { font-size: 10px; color: #666; text-transform: uppercase; }
-            .val { font-size: 20px; font-weight: 800; margin-top: 4px; }
-            .signal-row { border-left: 3px solid var(--amber); padding-left: 10px; margin: 10px 0; font-size: 13px; }
-            table { width: 100%; font-size: 11px; margin-top: 15px; border-collapse: collapse; }
-            th { text-align: left; color: #444; border-bottom: 1px solid #111; padding: 5px; }
-            td { padding: 8px 5px; border-bottom: 1px solid #050505; }
-            .mobile-hide { @media (max-width: 600px) { display: none; } }
+            body { background: #000; color: #0f6; font-family: sans-serif; padding: 15px; margin: 0; }
+            .card { background: #0a0a0a; border: 1px solid #222; padding: 15px; border-radius: 5px; margin-bottom: 10px; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .label { font-size: 10px; color: #555; }
+            .val { font-size: 18px; font-weight: bold; }
+            .sig { border-left: 3px solid orange; padding-left: 10px; margin: 10px 0; font-size: 12px; }
+            table { width: 100%; font-size: 12px; margin-top: 10px; border-collapse: collapse; }
+            td { padding: 8px 0; border-bottom: 1px solid #111; }
         </style>
     </head>
     <body>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <b style="font-size:16px;">TERMINAL V10.0</b>
-            <span style="font-size:10px; color:#444;">14:17:40 UTC</span>
-        </div>
-
+        <div style="font-size:12px; margin-bottom:20px; color:#555;">SYSTEM: V10.0 | 14:22:44 UTC</div>
         <div class="grid">
-            <div class="card"><div class="label">自驾收益</div><div class="val">-0.71%</div></div>
-            <div class="card"><div class="label">夏普 (Sharpe)</div><div class="val" style="color:white">-0.02</div></div>
-            <div class="card"><div class="label">风控 MDD</div><div class="val" style="color:#FF3333">-7.37%</div></div>
-            <div class="card mobile-hide"><div class="label">状态</div><div class="val">AUTO-PILOT</div></div>
+            <div class="card"><div class="label">自驾累计收益</div><div class="val">-0.84%</div></div>
+            <div class="card"><div class="label">夏普比率</div><div class="val">-0.03</div></div>
         </div>
-
-        <div class="card" style="margin-top:10px;">
-            <div class="label" style="color:var(--amber)">● 引擎识别机会点 (Actionable Alpha)</div>
-            <div class='signal-row'><b>CASH NEUTRAL</b><br><span style='color:#888'>等待波动率回归</span></div>
+        <div class="card">
+            <div class="label" style="color:orange;">● 引擎识别机会点</div>
+            <div class='sig'><b>CASH WAIT</b><br>无显著信号</div>
         </div>
-
-        <div class="card" style="margin-top:10px;">
-            <div class="label">核心模型胜率 (Model Win-Rate)</div>
+        <div class="card">
+            <div class="label">子模型胜率矩阵</div>
             <table>
-                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th><th class="mobile-hide">样本</th></tr></thead>
-                <tbody>
-                    <tr><td>A3</td><td style='color:var(--neon)'>72.7%</td><td>IWM</td><td class='mobile-hide'>11</td></tr><tr><td>D3</td><td style='color:var(--neon)'>70.19999999999999%</td><td>BTC-USD</td><td class='mobile-hide'>47</td></tr><tr><td>D2</td><td style='color:var(--neon)'>70.0%</td><td>FXI</td><td class='mobile-hide'>88</td></tr><tr><td>B3</td><td style='color:var(--neon)'>66.7%</td><td>TSLA</td><td class='mobile-hide'>33</td></tr>
-                </tbody>
+                <tr><td>A3</td><td style='color:#0f6'>72.7%</td><td>IWM</td></tr><tr><td>D3</td><td style='color:#0f6'>70.19999999999999%</td><td>BTC-USD</td></tr><tr><td>D2</td><td style='color:#0f6'>70.0%</td><td>FXI</td></tr><tr><td>B3</td><td style='color:#0f6'>66.7%</td><td>TSLA</td></tr>
             </table>
-        </div>
-
-        <div style="font-size:10px; color:#333; margin-top:15px; text-align:center;">
-            适配 iPhone 17 / Huawei Mate 系列 / Android 响应式终端
         </div>
     </body>
     </html>
