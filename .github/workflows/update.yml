@@ -24,7 +24,6 @@ jobs:
 
       - name: Run Quantitative Analysis
         run: |
-          # 确保数据目录存在（防止脚本崩溃）
           mkdir -p paper_results
           python fix_dashboard.py
 
@@ -32,14 +31,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 关键修复：先将所有生成的变动暂存
           mkdir -p docs
           cp trump_dashboard.html docs/index.html
-          git add docs/index.html
-          # 只有在有变化时才推送，避免死循环
+          git add docs/index.html paper_results/*.json 2>/dev/null || true
+          
+          # 检查是否有东西需要提交
           if git diff --staged --quiet; then
-            echo "No changes"
+            echo "No changes to commit"
           else
             git commit -m "🚀 自动更新: 指标同步 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            # 使用更稳健的推送方式
             git pull origin main --rebase
             git push origin main
           fi
