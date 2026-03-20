@@ -3,51 +3,83 @@
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            :root { --neon: #00FF66; --bg: #000; --card: #0A0A0A; --border: #1A1A1A; --amber: #FFB800; }
-            body { background: var(--bg); color: var(--neon); font-family: -apple-system, 'Inter', sans-serif; padding: 12px; margin: 0; }
-            .card { background: var(--card); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+            :root { --neon: #00FF66; --bg: #000; --red: #FF3333; --blue: #00CCFF; --amber: #FFB800; }
+            body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 12px; margin: 0; }
+            .card { background: #080808; border: 1px solid #1a1a1a; padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+            .env-tag { padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: bold; background: var(--blue); color: #000; }
             .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .val { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
-            .label { font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 4px; }
-            .sig-box { border-left: 3px solid var(--amber); padding-left: 12px; margin: 12px 0; }
-            table { width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px; }
-            th { text-align: left; color: #444; border-bottom: 1px solid #111; padding: 8px 4px; }
-            td { padding: 10px 4px; border-bottom: 1px solid #050505; }
-            .up { color: var(--neon); } .down { color: #FF3333; }
+            .prog-bg { background: #222; height: 4px; border-radius: 2px; margin-top: 5px; }
+            .prog-fill { height: 100%; background: var(--neon); transition: width 0.5s; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+            td { padding: 12px 5px; border-bottom: 1px solid #111; }
+            .action-tag { padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 3px; }
+            .LONG { background: var(--neon); color: #000; }
+            .WAIT { background: #222; color: #666; }
         </style>
     </head>
     <body>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <b style="font-size:14px; color:#fff;">TRUMP_CODE INTEL v14.0</b>
-            <span style="font-size:10px; color:#444;">2026-03-20 15:13:02 UTC</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom:10px;">
+            <b style="color:var(--neon);">TRUMP_CODE CORE V24.0</b>
+            <span class="env-tag">NORMAL MODE</span>
+        </div>
+
+        <div class="card">
+            <div style="font-size:10px; color:#444; margin-bottom:8px;">AI 智能情报翻译</div>
+            <div style="font-size:13px; color:#fff; border-left: 3px solid var(--blue); padding-left: 10px;">WALL STREET ANALYSTS SEE AN 86.45% UPSIDE IN BIODESIX (BDSX): CAN THE STOCK...</div>
+            <div style="font-size:9px; color:#333; margin-top:5px;">Wall Street analysts see an 86.45% upside in Biodesix (BDSX): Can the stock really move this high?</div>
         </div>
 
         <div class="grid">
-            <div class="card"><div class="label">自驾引擎收益</div><div class="val up">+11.19%</div></div>
-            <div class="card"><div class="label">夏普比率 (Sharpe)</div><div class="val" style="color:#fff;">1.63</div></div>
+            <div class="card"><div style="font-size:10px; color:#444;">20D 市场基准收益</div><div style="font-size:24px; font-weight:bold; color:var(--neon);">-4.44%</div></div>
+            <div class="card"><div style="font-size:10px; color:#444;">VIX 风险水位</div><div style="font-size:24px; font-weight:bold;">nan</div></div>
         </div>
 
         <div class="card">
-            <div class="label" style="color:var(--amber)">● 信号穿透与调仓指令 (Active Signals)</div>
-            <div class='sig-box'><b style='color:#fff;'>IWM | LONG</b><br><span style='color:var(--amber); font-size:11px;'>政策博弈</span></div><div class='sig-box'><b style='color:#fff;'>XLE | LONG</b><br><span style='color:var(--amber); font-size:11px;'>传统能源复苏</span></div><div class='sig-box'><b style='color:#fff;'>QQQ | LONG</b><br><span style='color:var(--amber); font-size:11px;'>科技成长因子</span></div>
-        </div>
-
-        <div class="card">
-            <div class="label">核心子模型胜率 (Win Rate Matrix)</div>
+            <div style="font-size:10px; color:var(--amber); margin-bottom:10px;">● 综合执行矩阵 (Execution Matrix)</div>
             <table>
-                <thead><tr><th>ID</th><th>胜率</th><th>映射资产</th></tr></thead>
+                <thead><tr style="color:#444;"><td>标的</td><td>指令</td><td>凯利建议</td><td>止盈进度</td><td>安全</td></tr></thead>
                 <tbody>
-                    <tr><td>A3</td><td style='color:#fff;'>72.7%</td><td>IWM</td></tr><tr><td>D3</td><td style='color:#fff;'>70.2%</td><td>BTC</td></tr><tr><td>D2</td><td style='color:#fff;'>70.0%</td><td>FXI</td></tr><tr><td>B3</td><td style='color:#fff;'>66.7%</td><td>TSLA</td></tr>
+                    
+                    <tr>
+                        <td><b>IWM</b><br><small style="color:#444;">-3.6%</small></td>
+                        <td><span class="action-tag WAIT">WAIT</span></td>
+                        <td style="color:var(--blue);">0.0%</td>
+                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
+                        <td style="color:var(--red);">DANGER</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><b>BITO</b><br><small style="color:#444;">+0.8%</small></td>
+                        <td><span class="action-tag LONG">LONG</span></td>
+                        <td style="color:var(--blue);">28.2%</td>
+                        <td><div class="prog-bg"><div class="prog-fill" style="width:7.010157884740353%;"></div></div></td>
+                        <td style="color:var(--red);">DANGER</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><b>FXI</b><br><small style="color:#444;">-3.1%</small></td>
+                        <td><span class="action-tag WAIT">WAIT</span></td>
+                        <td style="color:var(--blue);">0.0%</td>
+                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
+                        <td style="color:var(--red);">DANGER</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><b>QQQ</b><br><small style="color:#444;">-3.6%</small></td>
+                        <td><span class="action-tag WAIT">WAIT</span></td>
+                        <td style="color:var(--blue);">0.0%</td>
+                        <td><div class="prog-bg"><div class="prog-fill" style="width:0%;"></div></div></td>
+                        <td style="color:var(--red);">DANGER</td>
+                    </tr>
+                    
                 </tbody>
             </table>
         </div>
 
-        <div class="card" style="border-color:#333;">
-            <div class="label">风控监控 (Risk MDD)</div>
-            <div class="val down" style="font-size:18px;">-4.95%</div>
-            <div style="font-size:10px; color:#222; margin-top:10px;">适配全机型终端 | 动态权重分仓已启动</div>
+        <div style="text-align:center; font-size:9px; color:#222; margin-top:15px;">
+            INTELLIGENCE v24.0 | RE-INVESTMENT ACTIVE | 2026-03-20 15:26:50 UTC
         </div>
     </body>
     </html>
