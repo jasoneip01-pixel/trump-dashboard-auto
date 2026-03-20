@@ -3,33 +3,36 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
-            body { background: #000; color: #0f6; font-family: sans-serif; padding: 15px; margin: 0; }
-            .card { background: #0a0a0a; border: 1px solid #222; padding: 15px; border-radius: 5px; margin-bottom: 10px; }
-            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .label { font-size: 10px; color: #555; }
-            .val { font-size: 18px; font-weight: bold; }
-            .sig { border-left: 3px solid orange; padding-left: 10px; margin: 10px 0; font-size: 12px; }
-            table { width: 100%; font-size: 12px; margin-top: 10px; border-collapse: collapse; }
-            td { padding: 8px 0; border-bottom: 1px solid #111; }
+            :root { --neon: #00FF66; --bg: #000; --amber: #FFB800; }
+            body { background: var(--bg); color: var(--neon); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 15px; margin: 0; }
+            .card { background: #0A0A0A; border: 1px solid #1A1A1A; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
+            .header { font-size: 12px; color: #444; margin-bottom: 20px; display: flex; justify-content: space-between; }
+            .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .val { font-size: 24px; font-weight: 800; margin-top: 5px; }
+            .label { font-size: 10px; color: #666; text-transform: uppercase; }
+            .signal-item { border-left: 3px solid var(--amber); padding-left: 12px; margin: 15px 0; }
+            .action-btn { background: var(--amber); color: black; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 3px; }
         </style>
     </head>
     <body>
-        <div style="font-size:12px; margin-bottom:20px; color:#555;">SYSTEM: V10.0 | 14:22:44 UTC</div>
-        <div class="grid">
-            <div class="card"><div class="label">自驾累计收益</div><div class="val">-0.84%</div></div>
-            <div class="card"><div class="label">夏普比率</div><div class="val">-0.03</div></div>
+        <div class="header">
+            <b>AUTONOMOUS ENGINE V11.0</b>
+            <span>2026-03-20 14:25:02 UTC</span>
+        </div>
+        <div class="stat-grid">
+            <div class="card"><div class="label">自驾收益</div><div class="val">-5.42%</div></div>
+            <div class="card"><div class="label">夏普比率</div><div class="val" style="color:#fff">-4.50</div></div>
         </div>
         <div class="card">
-            <div class="label" style="color:orange;">● 引擎识别机会点</div>
-            <div class='sig'><b>CASH WAIT</b><br>无显著信号</div>
+            <div class="label" style="color:var(--amber)">当前执行指令 (Auto-Signals)</div>
+            <div class='signal-item'><span class='action-btn'>HOLD</span> <b>CASH</b><br><small style='color:#888'>暂无高置信度机会</small></div>
         </div>
-        <div class="card">
-            <div class="label">子模型胜率矩阵</div>
-            <table>
-                <tr><td>A3</td><td style='color:#0f6'>72.7%</td><td>IWM</td></tr><tr><td>D3</td><td style='color:#0f6'>70.19999999999999%</td><td>BTC-USD</td></tr><tr><td>D2</td><td style='color:#0f6'>70.0%</td><td>FXI</td></tr><tr><td>B3</td><td style='color:#0f6'>66.7%</td><td>TSLA</td></tr>
-            </table>
+        <div class="card" style="border-color: #333;">
+            <div class="label">风险监控 (MDD)</div>
+            <div class="val" style="color:#FF3333; font-size:18px;">-5.93%</div>
+            <div style="font-size:10px; color:#333; margin-top:10px;">适配: iPhone 17 / Huawei Mate / Android</div>
         </div>
     </body>
     </html>
